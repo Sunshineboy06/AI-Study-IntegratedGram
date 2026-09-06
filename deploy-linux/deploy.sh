@@ -17,13 +17,14 @@ echo "==> 监听: $PLATFORM_HOST:$PORT  (nginx: $([ "$SKIP_NGINX" = "1" ] && ech
 
 # 1) 系统依赖
 if command -v dnf >/dev/null; then PKG=dnf; else PKG=yum; fi
-$PKG install -y python3 python3-pip nginx >/dev/null
+echo '==> 正在安装 python3 / nginx（首次约 1-3 分钟）…'
+$PKG install -y python3 python3-pip nginx
 
 # 2) 虚拟环境与依赖
 cd "$APP_DIR"
 python3 -m venv venv
 ./venv/bin/pip install --upgrade pip >/dev/null
-./venv/bin/pip install -r requirements.txt >/dev/null
+./venv/bin/pip install -r requirements.txt
 
 # 3) systemd 常驻服务
 sed -e "s|__APP_DIR__|$APP_DIR|g" \
