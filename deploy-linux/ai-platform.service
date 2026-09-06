@@ -1,0 +1,14 @@
+[Unit]
+Description=AI Study Platform (public)
+After=network.target
+
+[Service]
+WorkingDirectory=__APP_DIR__
+ExecStart=__APP_DIR__/venv/bin/python server.py
+Environment=PLATFORM_HOST=__PLATFORM_HOST__
+Environment=PLATFORM_PORT=__PORT__
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
