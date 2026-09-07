@@ -22,7 +22,14 @@ MAX_UPLOAD = 100 * 1024 * 1024
 
 ALLOWED_EXT = {".txt", ".md", ".markdown", ".docx", ".pdf", ".csv", ".json"}
 
-app = Flask(__name__, static_folder=BASE_DIR, static_url_path="")
+# 静态文件白名单：只放行前端页面实际需要的类型，源码/配置一律 404
+STATIC_ALLOWED_EXT = {".html", ".css", ".js", ".txt",
+                      ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico",
+                      ".woff", ".woff2"}
+# 白名单类型中仍需单独屏蔽的文件（不泄露依赖清单等信息）
+STATIC_DENIED_NAMES = {"requirements.txt"}
+
+app = Flask(__name__, static_folder=None, static_url_path="")
 app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
@@ -30,6 +37,16 @@ app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 @app.get("/")
 def index():
     return send_from_directory(BASE_DIR, "index.html")
+
+
+@app.get("/<path:filename>")
+def static_files(filename):
+    """白名单式静态托管：.py/.sh/.git/.workbuddy 等一律按 404 处理（不泄露存在性）。"""
+    ext = os.path.splitext(filename)[1].lower()
+    if ext not in STATIC_ALLOWED_EXT or os.path.basename(filename) in STATIC_DENIED_NAMES:
+        from werkzeug.exceptions import NotFound
+        raise NotFound()
+    return send_from_directory(BASE_DIR, filename)
 
 
 @app.get("/api/config")
