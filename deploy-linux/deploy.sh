@@ -17,13 +17,18 @@ echo "==> 监听: $PLATFORM_HOST:$PORT  (nginx: $([ "$SKIP_NGINX" = "1" ] && ech
 
 # 1) 系统依赖
 if command -v dnf >/dev/null; then PKG=dnf; else PKG=yum; fi
+# AL3 默认 python3 是 3.6，flask3/pypdf 需要更高版本：优先安装 Python 3.11
+$PKG install -y python3.11 python3.11-pip >/dev/null 2>&1 || true
 echo '==> 正在安装 python3 / nginx（首次约 1-3 分钟）…'
 $PKG install -y python3 python3-pip nginx
 
-# 2) 虚拟环境与依赖
+# 2) 虚拟环境与依赖（优先使用新版 Python）
+PYTHON_BIN="$(command -v python3.11 || command -v python3.9 || command -v python3)"
+echo "==> 使用 Python: $PYTHON_BIN ($($PYTHON_BIN --version 2>&1))"
 cd "$APP_DIR"
-python3 -m venv venv
-./venv/bin/pip install --upgrade pip >/dev/null
+rm -rf venv
+"$PYTHON_BIN" -m venv venv
+./venv/bin/pip install --upgrade pip -i https://mirrors.cloud.aliyuncs.com/pypi/simple/ >/dev/null 2>&1 || true
 ./venv/bin/pip install -r requirements.txt
 
 # 3) systemd 常驻服务

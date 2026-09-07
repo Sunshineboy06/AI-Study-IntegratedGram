@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="fFE7GzbZs5IvcrfSroXoVZ">
+<head data-page-node-id="McTgqHmUyPj7uSk3ldXSal">
+<meta charset="UTF-8" data-page-node-id="HOYVihigEnkhhfVi2tsDC8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="87vQABI7un0G45bGBwM30P">
+<title>AI学习一体化平台 · 功能稳定性测试报告</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --ink:#1c2330; --muted:#5b6675; --line:#e4e8ee;
+          --green:#0d8a4f; --red:#c0392b; --amber:#b7791f; --blue:#2563eb; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif; background:var(--bg); color:var(--ink); padding:32px 16px; line-height:1.6; }
+  .wrap { max-width:860px; margin:0 auto; }
+  h1 { font-size:24px; margin-bottom:4px; }
+  .sub { color:var(--muted); font-size:13px; margin-bottom:24px; }
+  .verdict { background:linear-gradient(135deg,#0d8a4f,#0a6e3e); color:#fff; border-radius:12px; padding:18px 22px; margin-bottom:24px; }
+  .verdict b { font-size:18px; }
+  .verdict p { opacity:.92; font-size:13px; margin-top:4px; }
+  h2 { font-size:17px; margin:28px 0 12px; border-left:4px solid var(--blue); padding-left:10px; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:10px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.06); font-size:13.5px; }
+  th,td { padding:9px 12px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+  th { background:#f0f2f6; font-weight:600; }
+  tr:last-child td { border-bottom:none; }
+  .pass { color:var(--green); font-weight:600; }
+  .warn { color:var(--amber); font-weight:600; }
+  .bad { color:var(--red); font-weight:600; }
+  .card { background:var(--card); border-radius:10px; box-shadow:0 1px 3px rgba(0,0,0,.06); padding:16px 18px; margin-bottom:12px; font-size:13.5px; }
+  .card h3 { font-size:14.5px; margin-bottom:6px; }
+  .card .tag { display:inline-block; font-size:11px; padding:1px 8px; border-radius:99px; margin-right:6px; vertical-align:1px; }
+  .tag-high { background:#fdecea; color:var(--red); }
+  .tag-mid { background:#fdf3e0; color:var(--amber); }
+  .tag-low { background:#e8f3ec; color:var(--green); }
+  code { background:#eef1f5; border-radius:4px; padding:1px 5px; font-size:12.5px; }
+  .metric { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px; }
+  .metric div { background:var(--card); border-radius:10px; box-shadow:0 1px 3px rgba(0,0,0,.06); padding:10px 16px; min-width:120px; }
+  .metric b { display:block; font-size:20px; }
+  .metric span { font-size:12px; color:var(--muted); }
+  footer { margin-top:28px; color:var(--muted); font-size:12px; text-align:center; }
+</style>
+</head>
+<body data-page-node-id="glqJgVFYBCRmB87oF4hgfV">
+<div class="wrap" data-page-node-id="JZDx76T37GRitryx6br5OH">
+  <h1 data-page-node-id="jLv2vdZqNqUGqF3XhTmVkk">AI学习一体化平台（公网版）· 功能稳定性测试报告</h1>
+  <div class="sub" data-page-node-id="A9z9VIqbm4YjtcldCp56jt">测试时间：2026-09-07 23:37 – 23:52 · 测试环境：Windows 本机 · Flask 3.1.3 / Python 3.13.12（venv）· 端口 8890</div>
+
+  <div class="verdict" data-page-node-id="XUJktnRRtlZQ8hBI65rGLH">
+    <b data-page-node-id="TtYOYCwxrziwyUvFZqkmPa">总体结论：核心功能稳定可用 ✅</b>
+    <p data-page-node-id="nGAPGieo7e74hsGxQA5GYz">全部 40 项检查通过 37 项，无致命缺陷。发现 1 个高危环境问题（端口重复绑定）与 2 个中低风险问题，详见「发现的问题」。</p>
+  </div>
+
+  <h2 data-page-node-id="tCGb1GDKNhGmsZNykFjsAy">一、静态检查（前端）</h2>
+  <table data-page-node-id="dPpyXpBPXA2HIF3nVe2NXz">
+    <tr data-page-node-id="BL4mMggVclAf6LlTMrCvm5"><th data-page-node-id="bLLBV7B81jHG1kOcuKVFf2">检查项</th><th data-page-node-id="WXPJTEi5x1DKCTjtHJgYAu">结果</th><th data-page-node-id="wIncIbUY4CjsxV6G9GEAK0">说明</th></tr>
+    <tr data-page-node-id="59prKhEAabonLsNrVH37XB"><td data-page-node-id="Yt9qIsGz5erfFXCnDGAyOC">JS 语法检查（11 个文件）</td><td class="pass" data-page-node-id="gDOJgHpsXoAFTXYUsOeK30">通过</td><td data-page-node-id="HK7icnqZzirj2aDa6QopzN">node --check 全部无语法错误</td></tr>
+    <tr data-page-node-id="QgtbqZAVjGxJs0NveOpFr5"><td data-page-node-id="VXxpUj8DGXQvr3X3sRyqMA">index.html 资源引用</td><td class="pass" data-page-node-id="nX1YH1C77u6HzHeGksqU78">通过</td><td data-page-node-id="RTEW2pkJT87mei8OeZqpKz">11 个脚本 + 1 个样式表全部存在且可访问</td></tr>
+    <tr data-page-node-id="nxRQZ728rARaVpl8ndPFs3"><td data-page-node-id="16CvLlsGI2PrhYYlNwPVm1">前后端 API 契约</td><td class="pass" data-page-node-id="udV50mTeRaoHyHLuA8rZny">通过</td><td data-page-node-id="jnE1TzBnhXpJOHM7fkouna">前端仅调用 /sse 与 /api/extract-text；/api/vocab-extract 为死代码（useAI 已硬编码 false），不构成缺陷</td></tr>
+  </table>
+
+  <h2 data-page-node-id="9dBbqfxOXtuVYuetlDmvGy">二、服务端接口实测</h2>
+  <table data-page-node-id="9rQ2dn5wHwg0VWF7NsPDCq">
+    <tr data-page-node-id="YCN8W7fpqHnLmiBNAGo6TG"><th data-page-node-id="fGKvK2KzXtH8waCkGaQTlo">接口</th><th data-page-node-id="cQAHecuwMg28bOVb2QKSLa">期望</th><th data-page-node-id="L5gq7lgkTDl5gM4tdQGDlk">结果</th><th data-page-node-id="lkhEVr9VY8DGvKvprtVF53">响应</th></tr>
+    <tr data-page-node-id="vx6n3bSYEvG9rPt5Opj6wt"><td data-page-node-id="R1NoZtqvD4Wpa0LJPYJac1">GET /status</td><td data-page-node-id="S6SsT335DRrSSums2ofuV4">200 "ok"</td><td class="pass" data-page-node-id="uAvini4zOzKlC4N2TcyARm">通过</td><td data-page-node-id="0tUy31zih1MzfCibXabIEj">ok</td></tr>
+    <tr data-page-node-id="LmcdbJEDhykIPS3DSn84Pd"><td data-page-node-id="nKq0Hl0wbB6zKDC1TuevGd">GET /api/config</td><td data-page-node-id="cBzmsHByAP366KVFiXTGFm">200 公网版标识</td><td class="pass" data-page-node-id="rMUP0FUYOEwe6Ejy9bCotI">通过</td><td data-page-node-id="iuoDPDZBFzCBHBzYl5UyJA">{"ok":true,"public":true}</td></tr>
+    <tr data-page-node-id="1QbAdJJZvQLoAGLDBGDFez"><td data-page-node-id="yDj4cNR9AH9EQvDTlFPXB3">GET /（首页）</td><td data-page-node-id="BFo5U5PCqsJwLTRsflpsiW">200 index.html</td><td class="pass" data-page-node-id="yzfipI4dNt9sAx8pmZUG6q">通过</td><td data-page-node-id="IIZubCgH359GQLjyt7F3ty">2103 字节，与本地文件逐字节一致</td></tr>
+    <tr data-page-node-id="P1sZpVwd1hKny6PBx2xeIV"><td data-page-node-id="u7ssDtdDdq7mgKFarEGYna">GET 静态资源 ×12</td><td data-page-node-id="eZ9ItOuX4y6Dl7gZAmYd5g">200</td><td class="pass" data-page-node-id="Y3rGZTVYbguqUuZTVLjbir">通过</td><td data-page-node-id="kBvVGKGZnPXRQQ7WcM1c6U">css + 11 个 js 全部 200</td></tr>
+    <tr data-page-node-id="EO8MijhZoLExYxIrgqGJCm"><td data-page-node-id="W50JOu6uv7VFJLZ8Di5G1z">GET 中文路径文件（百分号编码）</td><td data-page-node-id="ZqXgM6pk6ptsjAX3JMGKLU">200</td><td class="pass" data-page-node-id="EWg6WNzWIAeOec51lD10Vz">通过</td><td data-page-node-id="MLjrYD0HBC8sc2wQzuk0ZK">提示词/*.txt 内容正确（浏览器默认编码，无影响）</td></tr>
+    <tr data-page-node-id="C8EBs0cRCMV3lzh5rWXMji"><td data-page-node-id="HH2qgt8TnnKo7OHxAt19tv">GET 不存在路径</td><td data-page-node-id="xepkCwa1rTgrO2ujTBIpS4">404</td><td class="pass" data-page-node-id="VBc0C2EzziaGYVI7mFY0Sa">通过</td><td data-page-node-id="O9FOV7OeSHZtRwLgZ0jlUH">正常返回 404，不崩溃</td></tr>
+    <tr data-page-node-id="f2vtAy4TNsWdtYdKYQVpeQ"><td data-page-node-id="1ylnXfJ4H3VvqU9BmUsxms">GET /sse（保活流）</td><td data-page-node-id="KMGCnCvauOzye7k7FTA74Z">持续心跳</td><td class="pass" data-page-node-id="VO3kPJsFIE18yGOVV0yuZd">通过</td><td data-page-node-id="ZwDOtUIfi6ELUcwlqJ6CwN">15 秒间隔 keepalive 正常</td></tr>
+  </table>
+
+  <h2 data-page-node-id="Lk4hqKQvEOU9MeGjQCRBnc">三、上传解析接口边界测试（POST /api/extract-text）</h2>
+  <table data-page-node-id="Jg6EawhSKHuCGMpJB9KNLI">
+    <tr data-page-node-id="qWOY5MIeP8YweWcgOdWBtI"><th data-page-node-id="4XLLqSzZ2aHueIKoSmH1vm">用例</th><th data-page-node-id="i319CGSHJa3nWRLgCLg3iF">期望</th><th data-page-node-id="sCOP6ACU3v0JdG7ewWcxKf">结果</th><th data-page-node-id="QPwyaW67ezn5JasdJa6EI7">说明</th></tr>
+    <tr data-page-node-id="DVOr4B3GafzJRHOJrGIkln"><td data-page-node-id="ydXaq8ynfCVHY58SFWfoJo">.txt 含中文</td><td data-page-node-id="AHoTPaUKEO2X44Hk5F87Sp">200 提取文本</td><td class="pass" data-page-node-id="HBLLmaPN3rAWQXfYROsXoe">通过</td><td data-page-node-id="JCUW2dVNyVdA2RMKlDftiD">中文内容完整</td></tr>
+    <tr data-page-node-id="OhDsTG9gxeGPuQ7zmAgVDt"><td data-page-node-id="gCdNgB6zvQi2yIKUr9XHZ5">.md</td><td data-page-node-id="IfGrcvLEWwVO7midHnux7d">200 提取文本</td><td class="pass" data-page-node-id="TUzhZ8w5Dro0LgVAttuNxD">通过</td><td data-page-node-id="i7qCiySsS4Q8Y1zGVs3Msj">—</td></tr>
+    <tr data-page-node-id="I1DxMR1v7FCmwCduUbLoDd"><td data-page-node-id="ZcuPJGFQi07ev1dkebwYoP">.docx</td><td data-page-node-id="mEgx9SDAopSiMn0I9GGg9e">200 提取文本</td><td class="pass" data-page-node-id="xHOmH4iYO37TFKo3w2jG4l">通过</td><td data-page-node-id="TfiQB3xReJdPTNqIptFhyI">段落文本完整提取</td></tr>
+    <tr data-page-node-id="stKYcYmNjiG3Ch6JQ6jmrY"><td data-page-node-id="CwUb8nL9gwjqKgIzv5Z59L">空文件</td><td data-page-node-id="HBD2zNlGMrU9hKHxCcsXD3">400 明确报错</td><td class="pass" data-page-node-id="HTedkdq7A3cthdnVFDClf8">通过</td><td data-page-node-id="aEQvey24S3A8h22JUCsovQ">"文件中没有提取到文本内容"</td></tr>
+    <tr data-page-node-id="aIyTk4IokAOnEvYS3TsbiS"><td data-page-node-id="4oEggtSYBd5DRbhXocPQrG">.exe 非法类型</td><td data-page-node-id="IMwSdj29sTuoF17jgNvDMf">400 拒绝</td><td class="pass" data-page-node-id="F73BZ2Dn3OTZCUCSYJjXpU">通过</td><td data-page-node-id="vO9zbyfdWEkBWG5CMByDvj">白名单拦截，提示支持格式</td></tr>
+    <tr data-page-node-id="OOjl405e2rnel3L9bRhnhF"><td data-page-node-id="RK2RLwEDjnzmg7Wf1lavgF">缺少 file 字段</td><td data-page-node-id="69KgrcHt2L3aqMTD7CrOHT">400 明确报错</td><td class="pass" data-page-node-id="ryP14jFy6DLfnTzCqGt5Ts">通过</td><td data-page-node-id="aiQ1TSSCuVt9GC9BIW6o96">"请先选择要上传的词表文件"</td></tr>
+    <tr data-page-node-id="Cn4bNOzq41BeMPPSvFet0V"><td data-page-node-id="xvHEYMo7NSpnW91HDXOSEQ">101MB 超限上传</td><td data-page-node-id="kZLQskrj90BB1WWAPjiAVL">413 拒绝</td><td class="warn" data-page-node-id="YI0UOPVQXxwyHHx037EqQD">偏差</td><td data-page-node-id="c3SRRU0fRCFUf3va7DLFAa">连接被服务端直接中止（无 HTTP 响应体）。经 nginx 反代部署时由 nginx 返回干净的 413，公网部署不受影响；直连 werkzeug 时客户端表现为连接重置</td></tr>
+    <tr data-page-node-id="ByvuQbMuwzqUJipOSNT8nA"><td data-page-node-id="S3bJdK9HluU6gv0K7B16AP">.csv / .json 上传</td><td data-page-node-id="GF26tFIS5QM3FDMTKqSNPa">—</td><td class="warn" data-page-node-id="QBOZQCXTWNGOzKdLxdSz91">不一致</td><td data-page-node-id="4JrsvczDb8Z9vUSAiwPBX8">server.py 白名单与报错文案均声称支持，但 parsers.py 实际抛"暂不支持"。返回 400 不崩溃，但承诺与实现矛盾。前端本地解析路径不经过此接口，实际使用不受影响</td></tr>
+  </table>
+
+  <h2 data-page-node-id="CvK4NXX2rBigi90l0HgBd2">四、并发与韧性压测</h2>
+  <div class="metric" data-page-node-id="zZPGNM7UYl13JNDwzYIFY3">
+    <div data-page-node-id="XQ532ZtutGogEDVvjxKplB"><b data-page-node-id="kiEKXTkeKPe15L7Q9WLhJQ">300</b><span data-page-node-id="1waqUShRZHC8EhxSy656aJ">总请求数（混合 4 类接口）</span></div>
+    <div data-page-node-id="r0hxgxpFyE5v4dlYq6IhZq"><b data-page-node-id="0FWmRCZIrIqTN69OY28Kwv">30</b><span data-page-node-id="XnDZHWTK5mfaARc9bu8uOX">并发线程</span></div>
+    <div data-page-node-id="9jsRyADc2fby0tEWXtVxfU"><b data-page-node-id="7NQ1notIeSTcrHIEYeYTDW">0</b><span data-page-node-id="N23Ab78HUhRZdZkeDsa66b">失败请求</span></div>
+    <div data-page-node-id="AvruX1vbp3lEq32ZGFICSL"><b data-page-node-id="wQyya09DLJDW5dtCcoTHKi">327/s</b><span data-page-node-id="HDShXvcsOh81GFSEdyT9AR">吞吐（RPS）</span></div>
+    <div data-page-node-id="cVqRg3KOpj0VfaJnx1hH98"><b data-page-node-id="Bhmu9BXqYDnIEyBizHSK3y">57ms</b><span data-page-node-id="qo4Q1PV6BBgwsCuyNRtHrn">P50 延迟</span></div>
+    <div data-page-node-id="p7RGUkiW0t6faKh59kWAxh"><b data-page-node-id="HmdwRy8hazhww76YkVH489">387ms</b><span data-page-node-id="9pcZ9KpvI5pZuZS4enmLgw">P99 延迟</span></div>
+  </div>
+  <table data-page-node-id="3Jup8eBeZqvbdb7lFjDD9Z">
+    <tr data-page-node-id="WYSeynW0fD7KSYituGOgAr"><th data-page-node-id="9Nq7FVmFGDyNh3hOOkE3HX">场景</th><th data-page-node-id="NkOOxMRx8l2K3emyMMVMkD">结果</th><th data-page-node-id="eGuBSUf0EpFg79VAvwFGX6">说明</th></tr>
+    <tr data-page-node-id="Tnhpkm3cBKGFNv3C6XRbWN"><td data-page-node-id="j5qgdEST1RzLuzkgZFVveV">8 条 SSE 长连接同时挂住</td><td class="pass" data-page-node-id="KdPSABGjFy2YOOwCS20iuo">通过</td><td data-page-node-id="0JqboqgmtcDyvINVR4oC28">长连接占用期间普通请求照常响应</td></tr>
+    <tr data-page-node-id="y59k0O3NMIqKP7bg0C381c"><td data-page-node-id="96f4KWILHI0D82HB4xr22O">压测后服务存活</td><td class="pass" data-page-node-id="bMeBCY5y1mua1hE2c3Konm">通过</td><td data-page-node-id="D8i4CKpg9Jqq2AHcHy2fyF">/status 复查正常，无内存异常迹象</td></tr>
+  </table>
+
+  <h2 data-page-node-id="gDzQPYOoAO2P1kYUuAbCGG">五、发现的问题与建议</h2>
+  <div class="card" data-page-node-id="DwUaPdREoqZjJisbv9cxPO">
+    <h3 data-page-node-id="CQpKbCYjDIIXACkQ8nc7HB"><span class="tag tag-high" data-page-node-id="s0FCsUlI0vR45BSnmX3CUd">高 · 环境问题</span>端口重复绑定：8796 / 8797 被历史残留实例占用</h3>
+    <p data-page-node-id="RtI5r6yv4qr6PZgiPeubeD">Windows 下 werkzeug 允许多进程绑定同一端口（SO_REUSEADDR 语义），导致新旧实例共存、请求被路由到旧版本服务（实测 /api/config 返回了旧版含 API Key 配置的响应）。</p>
+    <p data-page-node-id="ac1q5ykj7qTgmhDgDfhLqp">占用进程：<code data-page-node-id="ryLaxY4dvtCVBMsDNVjbRI">PID 24368（pythonw3.13.exe，监听 8796）</code>、<code data-page-node-id="hKMqtbhEOS2iPVJcZrX8kN">PID 36660（python.exe，监听 8797）</code>，另有 <code data-page-node-id="6GgQCDsDe6k7OEuublkymq">PID 34492</code> 疑似残留。</p>
+    <p data-page-node-id="urR73FTNp97Iz1Skl2oNXn"><b data-page-node-id="STrtJ9Y7MYikNedFOwlnfH">影响：</b>访客可能拿到旧版页面/接口；且旧配置接口暴露 API Key 状态。<b data-page-node-id="FOUzPHpOoO11tZMJ2YX2d8">建议：</b>确认后终止这三个残留进程；部署时在启动脚本中加入端口占用预检（如 <code data-page-node-id="1nk2IjWhayMofxlsG47pBN">netstat</code> 检测或先 bind 失败即退出）。Linux 上 gunicorn 默认不允许重复绑定，此问题主要是 Windows 本机风险。</p>
+  </div>
+  <div class="card" data-page-node-id="OfwHGDSvEGo4cVi2afXfIp">
+    <h3 data-page-node-id="mD3yAVO4GTunO4SFXf4PDh"><span class="tag tag-mid" data-page-node-id="Dp0AAtQp9zyqA65AXJdkfI">中 · 一致性</span>.csv / .json 支持承诺与实现不符</h3>
+    <p data-page-node-id="rCQAFe46ona2yeHhCSAWCp">server.py 的 <code data-page-node-id="JhZL0pSVgetAFk411rBwEc">ALLOWED_EXT</code> 与 400 文案均包含 .csv/.json，但 parsers.py 不支持，上传会得到前后矛盾的报错。建议二者对齐：要么 parsers 增加透传文本的 csv/json 分支，要么从白名单与文案中移除。</p>
+  </div>
+  <div class="card" data-page-node-id="5Fd8omunejr0LifXAbGrAP">
+    <h3 data-page-node-id="dFfD9Gze5V5w6CtZ2onk2F"><span class="tag tag-low" data-page-node-id="O6RiZWtyP2csrZDLdLHmK6">低 · 体验</span>直连 werkzeug 时超限上传表现为连接重置</h3>
+    <p data-page-node-id="dTyPuwn4906cRAxQ8ljdmk">MAX_CONTENT_LENGTH 生效但客户端收到的是连接中止而非 413。公网部署（nginx 反代）会由 nginx 干净地返回 413，可接受；如需直连场景友好，可在 nginx 配置 <code data-page-node-id="8XTmVHfGPJ3TXT2hTNBgdW">client_max_body_size 100m;</code> 与对应错误页。</p>
+  </div>
+
+  <footer data-page-node-id="wfpqFqFFnUkPqZbIFhjkIN">AI学习一体化平台 · 公网部署版 · 自动化稳定性测试报告</footer>
+</div>
+</body>
+</html>

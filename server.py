@@ -91,7 +91,30 @@ class QuietHandler(WSGIRequestHandler):
         pass
 
 
+def _check_port_free(host, port):
+    """启动前探测端口是否已被监听。
+
+    Windows 下 werkzeug 默认 SO_REUSEADDR 允许多进程重复绑定同一端口，
+    会导致新旧实例共存、请求被随机分流。此处用主动连接探测：
+    能连上说明已有实例在跑，直接退出而不是静默双绑定。
+    """
+    import socket
+    import sys
+    probe_host = "127.0.0.1" if host in ("0.0.0.0", "", "::") else host
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(1.0)
+    try:
+        if s.connect_ex((probe_host, port)) == 0:
+            print("错误：端口 %s:%d 已被其他进程监听（可能是残留的旧实例）。"
+                  "请先结束占用该端口的进程，或用 PLATFORM_PORT 指定其他端口。"
+                  % (probe_host, port), file=sys.stderr)
+            sys.exit(1)
+    finally:
+        s.close()
+
+
 if __name__ == "__main__":
+    _check_port_free(HOST, PORT)
     from werkzeug.serving import make_server
     server = make_server(HOST, PORT, app, threaded=True,
                          request_handler=QuietHandler)
