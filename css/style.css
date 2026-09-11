@@ -8,10 +8,12 @@
    边框：1px Ash #cecac8 发丝线；按钮 100px 药丸、卡片 40px 圆角
    ========================================================= */
 :root {
+  color-scheme: light;   /* 原生控件（文件选择器 / 滚动条 / 下拉列表）跟随浅色 */
   /* Colors */
   --color-parchment: #f6f3f1;
   --color-lake-blue: #2b59d1;
-  --color-periwinkle-mist: #cfdaf5;
+  /* 雾蓝底：其上的湖蓝小字需 ≥4.5:1（原 #cfdaf5 仅 4.34:1） */
+  --color-periwinkle-mist: #d5dff7;
   --color-sky-blue: #a0b5eb;
   --color-mint: #a7fccd;
   --color-coral: #ff9473;
@@ -20,7 +22,8 @@
   --color-off-black: #242424;
   --color-ink: #000000;
   --color-graphite: #4e4d4d;
-  --color-smoke: #797776;
+  /* 弱化文字：须在画布/ash-25/ash-30 三种底上均 ≥4.5:1（原 #797776 最差仅 3.61:1） */
+  --color-smoke: #666463;
   --color-ash: #cecac8;
 
   /* 功能反馈色（暖色调衍生，仅用于对错/警告等语义状态） */
@@ -29,20 +32,25 @@
   --functional-red: #b3402a;
   --functional-red-bg: #f9e7e2;
 
-  /* 色调衍生（深色模式下整体覆写） */
-  --color-lake-fill: #2b59d1;          /* 实心按钮/进度填充用 */
-  --tint-periwinkle: var(--tint-periwinkle);
-  --tint-ash-25: var(--tint-ash-25);
-  --tint-ash-30: var(--tint-ash-30);
-  --tint-ash-35: var(--tint-ash-35);
-  --tint-hover: var(--tint-hover);
-  --tint-coral: var(--tint-coral);
-  --tint-coral-strong: var(--tint-coral-strong);
-  --gold-text: var(--gold-text);
-  --mint-text: var(--mint-text);
-  --coral-text: var(--coral-text);
+  /* 色调衍生（浅色值在此，深色模式在 html.dark 整体覆写） */
+  --color-lake-fill: #2b59d1;                 /* 实心按钮/进度填充用 */
+  --tint-periwinkle: rgba(43, 89, 209, .07);  /* 淡蓝底：例句 / 脑图注 / 拖拽区 */
+  --tint-ash-25: rgba(206, 202, 200, .25);    /* 淡灰底：表头 / 弱提示 */
+  --tint-ash-30: rgba(206, 202, 200, .30);    /* 淡灰底：行内 code / 来源标签 */
+  --tint-ash-35: rgba(206, 202, 200, .35);    /* 淡灰底：页签悬停 */
+  --tint-hover: rgba(36, 36, 36, .06);        /* 描边按钮悬停的加深底 */
+  /* 珊瑚底透明度上限由对比度决定：.favw 上的红字 #b3402a 需 ≥4.5:1 */
+  --tint-coral: rgba(255, 148, 115, .10);         /* 珊瑚底：收藏行 */
+  --tint-coral-strong: rgba(255, 148, 115, .20);  /* 珊瑚底（强）：收藏词高光 / 填空题徽标 */
+  --gold-text: #6b5312;                       /* 金底上的深字 */
+  --mint-text: #1e6b45;                       /* 薄荷底上的深字 */
+  --coral-text: #8f431e;                      /* 珊瑚底上的深字 */
+  --on-functional: #ffffff;                   /* 功能色实心块上的字（深色模式反过来用深字） */
+  /* 永久反色面板：公告条底色恒为深黑，不随主题反转，故不给 html.dark 覆写 */
+  --ink-panel-bg: #000000;
+  --ink-panel-fg: #f6f3f1;
   --veil-base: 246, 243, 241;
-  --thumb-bg: var(--thumb-bg);
+  --thumb-bg: rgba(0, 0, 0, .08);             /* 滑块 / 占位底色 */
 
   /* Typography */
   --font-mono: 'ABC Diatype Mono', 'JetBrains Mono', 'IBM Plex Mono', 'Space Mono',
@@ -72,6 +80,12 @@
 
   /* Shadow（仅悬浮层使用，卡片禁用阴影） */
   --shadow-md: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px;
+
+  /* 背单词：自评后答案区 / 例句目标词高亮（浅色值，深色模式在下文覆写） */
+  --v-answer-bg: #fbf4dc;
+  --v-answer-line: #e8d79a;
+  --v-hl-bg: #ecda98;
+  --v-hl-text: #4a3c0e;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
@@ -112,7 +126,7 @@ main, .topbar, #toast-box { position: relative; z-index: 1; }
 /* ---------- 顶部公告条（Ink 黑） ---------- */
 .announce {
   display: flex; align-items: center; gap: 16px;
-  background: var(--color-ink); color: var(--color-parchment);
+  background: var(--ink-panel-bg); color: var(--ink-panel-fg);
   font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
   padding: 10px 28px;
   border-bottom: 1px solid var(--color-ash);
@@ -120,11 +134,12 @@ main, .topbar, #toast-box { position: relative; z-index: 1; }
 .announce .a-spacer { flex: 1; }
 .announce .a-pill {
   border: 1px solid rgba(246, 243, 241, .6); border-radius: 9999px;
-  padding: 2px 12px; font-size: 11px; color: var(--color-parchment);
+  padding: 2px 12px; font-size: 11px; color: inherit;
   text-decoration: none; white-space: nowrap;
 }
 
-button { font-family: inherit; }
+/* 按钮不继承 body 的文字色，必须显式 inherit；否则深色下会退回浏览器默认的黑字 */
+button { font-family: inherit; color: inherit; }
 
 /* ---------- 顶栏导航 ---------- */
 .topbar {
@@ -192,7 +207,7 @@ main { max-width: 1160px; margin: 40px auto 96px; padding: 0 24px; }
 .btn.secondary:hover { background: #3a3a3a; }
 .btn.ghost { border-color: var(--color-ash); background: transparent; color: var(--color-graphite); }
 .btn.ghost:hover { border-color: var(--color-off-black); color: var(--color-off-black); background: transparent; }
-.btn.danger { background: var(--functional-red); border-color: var(--functional-red); color: #fff; }
+.btn.danger { background: var(--functional-red); border-color: var(--functional-red); color: var(--on-functional); }
 .btn.danger-text { color: var(--functional-red); border-color: transparent; background: transparent; }
 .btn.danger-text:hover { border-color: var(--functional-red); }
 .btn.sm { padding: 4px 14px; font-size: 12px; }
@@ -224,7 +239,7 @@ textarea { width: 100%; resize: vertical; line-height: 1.7; }
 }
 .b-single { background: var(--color-periwinkle-mist); border-color: var(--color-periwinkle-mist); color: var(--color-lake-blue); }
 .b-multi { background: var(--color-gold); border-color: var(--color-gold); color: var(--gold-text); }
-.b-fill { background: #fbe0d6; border-color: #fbe0d6; color: var(--coral-text); }
+.b-fill { background: var(--tint-coral-strong); border-color: var(--tint-coral-strong); color: var(--coral-text); }
 .b-short { background: var(--color-mint); border-color: var(--color-mint); color: var(--mint-text); }
 
 /* ---------- 首页 ---------- */
@@ -297,6 +312,7 @@ textarea { width: 100%; resize: vertical; line-height: 1.7; }
   display: flex; align-items: flex-start; gap: 12px; width: 100%; text-align: left;
   padding: 13px 18px; margin-bottom: 10px;
   border: 1px solid var(--color-ash); background: transparent;
+  color: var(--color-off-black);   /* 必须显式声明：button 不继承 body 文字色，深色下会变黑字消失 */
   border-radius: var(--radius-2xl); cursor: pointer; font-size: 14px;
   transition: .15s; line-height: 1.55;
 }
@@ -309,9 +325,9 @@ textarea { width: 100%; resize: vertical; line-height: 1.7; }
 }
 .opt.picked { border-color: var(--color-lake-blue); background: var(--color-periwinkle-mist); }
 .opt.correct { border-color: var(--functional-green); background: var(--functional-green-bg); }
-.opt.correct .letter { background: var(--functional-green); color: #fff; }
+.opt.correct .letter { background: var(--functional-green); color: var(--on-functional); }
 .opt.wrong { border-color: var(--functional-red); background: var(--functional-red-bg); }
-.opt.wrong .letter { background: var(--functional-red); color: #fff; }
+.opt.wrong .letter { background: var(--functional-red); color: var(--on-functional); }
 .opt:disabled { cursor: default; opacity: .85; }
 .feedback { padding: 12px 18px; border-radius: var(--radius-2xl); font-size: 13.5px; margin-top: 4px; }
 .feedback.ok { background: var(--functional-green-bg); color: var(--functional-green); }
@@ -453,8 +469,8 @@ dialog[open] { animation: dlgIn .38s cubic-bezier(.22, .9, .3, 1); }
   max-width: 80vw;
 }
 .toast.show { opacity: 1; transform: translateY(0); }
-.toast.error { background: var(--functional-red); color: #fff; }
-.toast.ok { background: var(--functional-green); color: #fff; }
+.toast.error { background: var(--functional-red); color: var(--on-functional); }
+.toast.ok { background: var(--functional-green); color: var(--on-functional); }
 
 /* ---------- 脑图 ---------- */
 .mm-toolbar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 16px 24px; }
@@ -674,6 +690,37 @@ dialog[open] { animation: dlgIn .38s cubic-bezier(.22, .9, .3, 1); }
 .v-fav.on { color: var(--functional-red); border-color: var(--functional-red); }
 .v-actions .row { justify-content: center; }
 
+/* --- 自评（认识/不认识）后：就地展示答案 --- */
+.v-answer {
+  display: inline-block;
+  margin-top: 22px;
+  padding: 8px 28px;
+  border-radius: var(--radius-2xl);
+  background: var(--v-answer-bg);
+  border: 1px solid var(--v-answer-line);
+}
+.v-answer .v-meaning, .v-answer .v-meaning-big { margin-top: 0; }
+.v-verdict { margin: 0 0 16px; font-size: 15px; letter-spacing: .02em; }
+.v-verdict.ok { color: var(--functional-green); }
+.v-verdict.no { color: var(--functional-red); }
+.v-keys { font-size: 11px; letter-spacing: .04em; margin-top: 12px; }
+.v-keys b { font-weight: 700; }
+
+/* 例句中的目标单词高亮（含词形变化） */
+.v-hl {
+  background: var(--v-hl-bg);
+  color: var(--v-hl-text);
+  border-radius: 4px;
+  padding: 0 4px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* 已选中的自评按钮：保留配色但不可再点 */
+.btn.picked:disabled { opacity: 1; cursor: default; }
+.btn.picked.ok { background: var(--functional-green-bg); border-color: var(--functional-green); color: var(--functional-green); }
+.btn.picked.no { background: var(--functional-red-bg); border-color: var(--functional-red); color: var(--functional-red); }
+
 .v-bankbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .v-cats { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
 .v-cat {
@@ -698,6 +745,7 @@ dialog[open] { animation: dlgIn .38s cubic-bezier(.22, .9, .3, 1); }
 
 /* ================= 深色模式（夜间学习） ================= */
 html.dark {
+  color-scheme: dark;    /* 原生控件 / 滚动条 / 下拉列表一并变深，否则夜里会闪出白块 */
   --color-parchment: #1b1917;
   --color-lake-blue: #8aa6f2;
   --color-lake-fill: #3d63d6;
@@ -711,24 +759,34 @@ html.dark {
   --color-off-black: #ece7e1;
   --color-ink: #0d0c0b;
   --color-graphite: #b9b3ac;
-  --color-smoke: #857f78;
+  /* 弱化文字：深色下原 #857f78 在 ash 底上仅 3.63:1 */
+  --color-smoke: #9d9790;
   --color-ash: #3b3733;
 
   --functional-green: #7fd4a1;
   --functional-green-bg: rgba(127, 212, 161, .14);
   --functional-red: #ff9077;
   --functional-red-bg: rgba(255, 144, 119, .14);
+  --on-functional: #0d0c0b;                   /* 深色下功能色是浅色，实心块上改用深墨（原 #fff 仅 1.8~2.2:1） */
 
   --tint-periwinkle: rgba(138, 166, 242, .12);
   --tint-ash-25: rgba(236, 231, 225, .07);
   --tint-ash-30: rgba(236, 231, 225, .08);
   --tint-ash-35: rgba(236, 231, 225, .09);
   --tint-hover: rgba(236, 231, 225, .08);
+  --tint-coral: rgba(255, 148, 115, .14);        /* 原浅色值缺失深色覆写，一并补上 */
+  --tint-coral-strong: rgba(255, 148, 115, .22);  /* 上限同样由 .favw 红字对比度反推 */
   --gold-text: #ecd98f;
   --mint-text: #9defc0;
   --coral-text: #ffb290;
   --veil-base: 27, 25, 23;
   --thumb-bg: rgba(255, 255, 255, .08);
+
+  /* 背单词：自评答案区 / 例句高亮（深色值） */
+  --v-answer-bg: rgba(236, 217, 143, .10);
+  --v-answer-line: rgba(236, 217, 143, .32);
+  --v-hl-bg: rgba(236, 217, 143, .30);
+  --v-hl-text: #f5ead0;
 }
 html.dark .wash { opacity: .22; }
 html.dark .btn.secondary:hover { background: rgba(236, 231, 225, .85); }
@@ -764,6 +822,8 @@ main > *:nth-child(n+5) { animation-delay: .2s; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 html.dark .topbar { background: rgba(27, 25, 23, .72); }
+/* 深色下金底变暗，原 rgba(...,.4) 的浅金底会把金字压到 4.05:1，故减淡底色 */
+html.dark .ai-warn { background: rgba(236, 218, 152, .14); border-color: rgba(236, 218, 152, .35); }
 
 /* ================= 学习日历 / 图表 ================= */
 .cal-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
@@ -1010,7 +1070,7 @@ html.dark .feat-blob { opacity: .3; }
 .mk-opt i.w40 { width: 40%; } .mk-opt i.w50 { width: 50%; } .mk-opt i.w55 { width: 55%; }
 @keyframes optPick {
   0%, 18% { border-color: var(--color-ash); background: var(--color-parchment); }
-  24%, 38% { border-color: var(--color-functional-green); background: var(--functional-green-bg); }
+  24%, 38% { border-color: var(--functional-green); background: var(--functional-green-bg); }
   44%, 100% { border-color: var(--color-ash); background: var(--color-parchment); }
 }
 

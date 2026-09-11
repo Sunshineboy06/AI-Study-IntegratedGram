@@ -159,7 +159,8 @@ const AzureTTS = {
 
 const Vocab = {
   page: 'home',        // home | bank | session
-  session: null,       // {mode:'new'|'review'|'mix', current, revealed}
+  session: null,       // {mode:'new'|'review'|'mix', current, revealed, answered}
+                       //   revealed=提前偷看答案；answered='known'|'unknown'|null=已自评（停在当前词看释义）
   showMode: 'en',      // en=正面英文 | zh=正面中文
   bankCat: 'all',      // all | new | learning | mastered | fav
   bankSort: 'az',      // az | reviews
@@ -428,7 +429,7 @@ const Vocab = {
   startSession(mode) {
     const first = Store.pickWord(mode);
     if (!first) return toast('没有可背诵的单词，请先导入词库', 'error');
-    this.session = { mode, current: first, revealed: false };
+    this.session = { mode, current: first, revealed: false, answered: null };
     Store.touchPick(first.word);
     this.page = 'session';
     this.render();
@@ -450,6 +451,7 @@ const Vocab = {
     }
     this.session.current = next;
     this.session.revealed = false;
+    this.session.answered = null;      // 新词回到「未自评」状态
     Store.touchPick(next.word);
     this.renderSession();
   },
@@ -462,6 +464,14 @@ const Vocab = {
     const t = Store.getToday();
     const fav = w.fav;
     const status = Store.wordStatus(w);
+    const done = !!s.answered;          // 已自评 → 停在当前词展示释义
+    const seen = s.revealed || done;    // 答案是否已揭晓
+    const meaning = w.meaning || '（无释义）';
+    const favBtn = `<button class="btn ghost sm v-fav${fav ? ' on' : ''}" id="v-fav">${fav ? '★' : '☆'}</button>`;
+    const subHtml = (w.phonetic || w.pos)
+      ? `<div class="v-sub">${esc(w.phonetic)}${w.pos ? '　' + esc(w.pos) : ''}</div>` : '';
+    const exampleHtml = w.example
+      ? `<div class="v-example">${this.highlightExample(w.example, w.word)}</div>` : '';
 
     $('#main').innerHTML = `
       <h2 class="page-title">${s.mode === 'new' ? '▶ 学习新词' : '↻ 复习单词'}</h2>
@@ -490,32 +500,36 @@ const Vocab = {
           })()}
         </div>
         ${this.showMode === 'en' ? `
-          <div class="v-word">${esc(w.word)} <button class="btn ghost sm v-fav${fav ? ' on' : ''}" id="v-fav">${fav ? '★' : '☆'}</button></div>
-          ${w.phonetic || w.pos ? `<div class="v-sub">${esc(w.phonetic)}${w.pos ? '　' + esc(w.pos) : ''}</div>` : ''}
-          ${s.revealed
-            ? `<div class="v-meaning">${esc(w.meaning || '（无释义）')}</div>`
-            : (w.meaning ? '<button class="btn ghost" id="v-reveal">显示释义</button>' : '')}
-          ${s.revealed && w.example ? `<div class="v-example">${esc(w.example)}</div>` : ''}
+          <div class="v-word">${esc(w.word)} ${favBtn}</div>
+          ${subHtml}
+          ${!seen
+            ? (w.meaning ? '<button class="btn ghost" id="v-reveal">显示释义</button>' : '')
+            : (done ? `<div class="v-answer"><div class="v-meaning">${esc(meaning)}</div></div>`
+                    : `<div class="v-meaning">${esc(meaning)}</div>`)}
+          ${seen ? exampleHtml : ''}
         ` : `
-          <div class="v-meaning-big">${esc(w.meaning || '（无释义）')} <button class="btn ghost sm v-fav${fav ? ' on' : ''}" id="v-fav">${fav ? '★' : '☆'}</button></div>
-          ${s.revealed ? `
-            <div class="v-word">${esc(w.word)}</div>
-            ${w.phonetic || w.pos ? `<div class="v-sub">${esc(w.phonetic)}${w.pos ? '　' + esc(w.pos) : ''}</div>` : ''}
-            ${w.example ? `<div class="v-example">${esc(w.example)}</div>` : ''}`
+          ${done
+            ? `<div class="v-answer"><div class="v-meaning-big">${esc(meaning)} ${favBtn}</div></div>`
+            : `<div class="v-meaning-big">${esc(meaning)} ${favBtn}</div>`}
+          ${seen
+            ? `<div class="v-word">${esc(w.word)}</div>${subHtml}${exampleHtml}`
             : '<button class="btn ghost" id="v-reveal">显示单词</button>'}
         `}
       </div>
 
       <div class="card v-actions">
+        ${done ? `<p class="v-verdict ${s.answered === 'known' ? 'ok' : 'no'}">${s.answered === 'known' ? '✓ 已标记：认识' : '✗ 已标记：不认识'}　<span class="muted">看完释义后点「下一个」继续</span></p>` : ''}
         <div class="row">
-          <button class="btn primary lg" id="v-known">✓ 认识</button>
-          <button class="btn danger lg" id="v-unknown">✗ 不认识</button>
+          <button class="btn ${done ? (s.answered === 'known' ? 'picked ok' : 'ghost') : 'primary'} lg" id="v-known"${done ? ' disabled' : ''}>✓ 认识</button>
+          <button class="btn ${done ? (s.answered === 'unknown' ? 'picked no' : 'ghost') : 'danger'} lg" id="v-unknown"${done ? ' disabled' : ''}>✗ 不认识</button>
         </div>
         <div class="row">
+          ${done ? '<button class="btn primary lg" id="v-next">下一个 →</button>'
+                 : '<button class="btn ghost" id="v-skip">跳过</button>'}
           <button class="btn ghost" id="v-master">✅ 完全背诵（直接置绿）</button>
-          <button class="btn ghost" id="v-skip">跳过</button>
         </div>
         <p class="muted">背诵次数：${w.reviewCount}${!w.mastered && w.stageDueAt ? ` · 下次复习节点：${fmtDate(w.stageDueAt)}` : ''}${w.mastered ? ' · 🟢 已完全背诵' : ''}</p>
+        <p class="muted v-keys">快捷键：<b>空格</b> ${done ? '下一个' : '显示释义'}　·　<b>1</b> / <b>→</b> 认识　·　<b>2</b> / <b>←</b> 不认识</p>
       </div>`;
 
     $('#v-exit').onclick = () => this.toHome();
@@ -541,13 +555,85 @@ const Vocab = {
       this.renderSession();
     };
     const reveal = $('#v-reveal');
-    if (reveal) reveal.onclick = () => { this.session.revealed = true; this.renderSession(); };
+    if (reveal) reveal.onclick = () => this.reveal();
     $('#v-fav').onclick = () => { Store.toggleFav(w.word); this.renderSession(); };
-    $('#v-known').onclick = () => { Store.markKnown(w.word, this.session.mode); this.nextWord(); };
-    $('#v-unknown').onclick = () => { Store.markUnknown(w.word, this.session.mode); this.nextWord(); };
+    $('#v-known').onclick = () => this.answer('known');
+    $('#v-unknown').onclick = () => this.answer('unknown');
     $('#v-master').onclick = () => { Store.forceMaster(w.word); toast(`「${w.word}」已完全背诵`, 'ok'); this.nextWord(); };
-    $('#v-skip').onclick = () => this.nextWord();
-    if (Store.data.vocab.settings.autoSpeak) this.speak(w.word);
+    const skip = $('#v-skip');
+    if (skip) skip.onclick = () => this.nextWord();
+    const next = $('#v-next');
+    if (next) { next.onclick = () => this.nextWord(); next.focus({ preventScroll: true }); }
+    this.bindKeys();
+    /* 作答后停在本词看释义，不再重复朗读 */
+    if (Store.data.vocab.settings.autoSpeak && !done) this.speak(w.word);
+  },
+
+  /* 提前偷看答案（不改变背诵进度） */
+  reveal() { this.session.revealed = true; this.renderSession(); },
+
+  /* ---------- 自评：认识 / 不认识 ----------
+     记录进度后**不立即切词**，就地展示释义等完整答案，等用户点「下一个」再继续 */
+  answer(kind) {
+    const s = this.session;
+    if (!s || s.answered) return;               // 防重复点击
+    const w = s.current;
+    const wasMastered = !!w.mastered;
+    if (kind === 'known') Store.markKnown(w.word, s.mode);
+    else Store.markUnknown(w.word, s.mode);
+    s.answered = kind;
+    s.revealed = true;
+    this.renderSession();
+    /* 只在状态发生跃迁时提示，避免每次作答都弹 */
+    if (!wasMastered && w.mastered) toast(`🎉 「${w.word}」走完全部复习节点，自动置绿`, 'ok');
+    else if (wasMastered && !w.mastered) toast(`「${w.word}」已降回「学习中」，重新走曲线`, 'info');
+  },
+
+  /* ---------- 例句中高亮目标单词（含常见词形变化） ---------- */
+  highlightExample(example, word) {
+    const safe = esc(example);
+    const raw = String(word || '').trim();
+    if (raw.length < 2) return safe;      // 单字母词（a / I）高亮纯噪音
+    /* 先按同一套 HTML 转义再造正则，例句与单词的字符序列才能对齐（如 don't 的 &#39;） */
+    const core = esc(raw).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pats = new Set();
+    const add = (stem, tails) => tails.forEach(t => pats.add(stem + t));
+    const T = ['', 's', 'es', 'ed', 'd', 'ing', 'ly', 'er', 'est'];
+    add(core, T);                                                                       // 原形与常规变形
+    if (/e$/i.test(raw)) add(core.slice(0, -1), ['ing', 'ed', 'es', 'er', 'est']);        // use → using / used
+    if (/[^aeiou]y$/i.test(raw)) add(core.slice(0, -1), ['ies', 'ied', 'ier', 'iest', 'ily']);  // study → studies / happier
+    if (/[^aeiou][aeiou][^aeiouwxy]$/i.test(raw) && /^[a-z]$/i.test(raw.slice(-1)))
+      add(core + raw.slice(-1).toLowerCase(), ['ing', 'ed', 'er', 'est']);                // run → running
+    const list = Array.from(pats).sort((a, b) => b.length - a.length);                    // 长匹配优先，避免只吃到词干
+    const re = new RegExp('\\b(?:' + list.join('|') + ')\\b', 'ig');
+    return safe.replace(re, m => `<mark class="v-hl">${m}</mark>`);
+  },
+
+  /* ---------- 键盘快捷键：空格=揭晓/下一个，1/→=认识，2/←=不认识 ---------- */
+  bindKeys() {
+    if (this._keysBound) return;
+    this._keysBound = true;
+    document.addEventListener('keydown', e => {
+      if (this.page !== 'session' || !this.session) return;
+      if (document.querySelector('dialog[open]')) return;                 // 弹窗优先
+      const el = e.target || {};
+      const tag = String(el.tagName || '').toLowerCase();
+      if (tag === 'input' || tag === 'select' || tag === 'textarea' || el.isContentEditable) return;
+      const k = e.key;
+      /* 焦点在按钮/链接上时交还原生点击，避免一次按键触发两次 */
+      if ((k === ' ' || k === 'Enter' || k === 'Spacebar') &&
+          (tag === 'button' || tag === 'a' || tag === 'summary')) return;
+      if (k === ' ' || k === 'Enter' || k === 'Spacebar') {
+        e.preventDefault();
+        this.session.answered ? this.nextWord() : this.reveal();
+      } else if ((k === '1' || k === 'ArrowRight') && !this.session.answered) {
+        e.preventDefault();
+        this.answer('known');
+      } else if ((k === '2' || k === 'ArrowLeft') && !this.session.answered) {
+        e.preventDefault();
+        this.answer('unknown');
+      }
+    });
   },
 
   /* ---------- 读音：Azure 神经语音优先，未配置/失败回退原生；每次调用都重新播放 ---------- */
@@ -722,7 +808,7 @@ const Vocab = {
           ${w.phonetic ? `<p><b>音标：</b>${esc(w.phonetic)}</p>` : ''}
           ${w.pos ? `<p><b>词性：</b>${esc(w.pos)}</p>` : ''}
           <p><b>释义：</b>${esc(w.meaning || '—')}</p>
-          ${w.example ? `<p><b>例句：</b>${esc(w.example)}</p>` : ''}
+          ${w.example ? `<p><b>例句：</b>${this.highlightExample(w.example, w.word)}</p>` : ''}
           <div class="row" style="margin-top:8px"><button class="btn ghost sm v-row-speak" data-word="${esc(w.word)}">🔊 播放读音</button></div>
           <p class="muted">已背诵 ${w.reviewCount} 次${w.mastered ? ' · 完全背诵' : (!w.stageDueAt ? '' : ` · 下一节点 ${fmtDate(w.stageDueAt)}`)} · 加入于 ${fmtDate(w.addedAt)}</p>
           <div class="row">
@@ -742,6 +828,7 @@ const Vocab = {
       <div class="import-body">
         <input type="file" id="vv-file" accept=".txt,.md,.markdown,.csv,.tsv,.json,.pdf,.docx" multiple>
         <textarea id="vv-paste" rows="5" placeholder="或在此粘贴单词表：每行一个单词（支持 单词|音标|词性|释义|例句 分隔，或 JSON）"></textarea>
+        <label class="field"><input type="checkbox" id="vv-ai" checked> AI 智能抽取（PDF / DOCX / 排版混乱的词表推荐开启，使用「AI生成」页的模型设置）</label>
         <div class="dlg-actions">
           <button class="btn ghost" id="vv-cancel">取消</button>
           <button class="btn primary" id="vv-go">开始导入</button>
@@ -753,7 +840,7 @@ const Vocab = {
     $('#vv-go', dlg).onclick = async () => {
       const files = Array.from($('#vv-file', dlg).files || []);
       const paste = $('#vv-paste', dlg).value.trim();
-      const useAI = false;   // 公网部署版：不调用服务端 AI，全部本地解析
+      const useAI = $('#vv-ai', dlg).checked;
       const status = $('#vv-status', dlg);
       if (!files.length && !paste) return toast('请选择文件或粘贴单词表', 'error');
 
@@ -775,7 +862,7 @@ const Vocab = {
         }
         const r = this.localParse(text, ext);
         if (!r.length && (ext === 'pdf' || ext === 'docx')) {
-          throw new Error(`「${label}」未能从 ${ext.toUpperCase()} 中解析出单词。建议把内容复制为 .txt，或用第三方 AI 整理成单词表后导入`);
+          throw new Error(`「${label}」是 ${ext.toUpperCase()} 文件，本地无法解析，请勾选 AI 智能抽取后重试`);
         }
         return r;
       };
