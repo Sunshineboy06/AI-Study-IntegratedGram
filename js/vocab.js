@@ -17,6 +17,17 @@ const TTS = {
     const load = () => { this.voices = speechSynthesis.getVoices(); };
     load();
     speechSynthesis.onvoiceschanged = load;   // 语音列表异步加载
+    /* 移动端解锁：iOS / 部分安卓浏览器要求首次语音在用户手势内触发，
+       第一次触摸时播一个静音 utterance，之后的「🔊 播放读音 / 自动读音」才能出声 */
+    const unlock = () => {
+      try {
+        const u = new SpeechSynthesisUtterance(' ');
+        u.volume = 0;
+        speechSynthesis.speak(u);   // 不 cancel：cancel 会波及后续朗读（interrupted 竞态）
+      } catch (e) { /* 忽略 */ }
+    };
+    document.addEventListener('touchend', unlock, { once: true, passive: true });
+    document.addEventListener('pointerdown', unlock, { once: true, passive: true });
   },
 
   /* 按口音挑最佳语音：Natural/Online（Edge 内置免费 Azure 拟真音色）> Microsoft > 第一个 */
@@ -32,7 +43,7 @@ const TTS = {
     if (!this.ready) return false;
     const lang = accent === 'uk' ? 'en-GB' : 'en-US';
     try {
-      speechSynthesis.cancel();               // 防止连读叠音
+      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();  // 防叠音；空队列时 cancel 会误伤新 utterance
       const u = new SpeechSynthesisUtterance(String(word).replace(/\(\d+\)$/, ''));
       u.lang = lang;
       u.rate = Math.min(2, Math.max(0.5, speed)) * 0.9;
@@ -46,9 +57,14 @@ const TTS = {
         if (!warned) {
           try { sessionStorage.setItem('tts.voiceWarned', '1'); } catch (e) { /* 忽略 */ }
           this._warned = true;
-          setTimeout(() => toast('未检测到英文语音，读音可能不准。可在 Windows 设置 → 时间和语言 → 语音 中添加英语语音包', 'error'), 0);
+          setTimeout(() => toast('当前浏览器没有英文语音，读音可能无声。手机建议用 Edge / Chrome 打开（微信内置浏览器不支持朗读）；或在设置里配置 Azure 神经语音', 'error'), 0);
         }
       }
+      u.onerror = ev => {
+        if (this._errShown) return;
+        this._errShown = true;
+        toast('朗读失败（' + (ev.error || 'unknown') + '）：该浏览器可能缺少语音引擎，建议换 Edge / Chrome 打开，或在设置中配置 Azure 神经语音', 'error');
+      };
       speechSynthesis.speak(u);
       return true;
     } catch (e) { return false; }
@@ -209,6 +225,16 @@ const Vocab = {
         </div>
       </div>
 
+      ${words.length === 0 ? `
+      <div class="card v-empty-guide">
+        <h3 class="card-title">📥 词库还是空的</h3>
+        <p class="muted">单词数据只保存在<b>本机浏览器</b>里，不会跨设备同步——电脑上导入的词，手机上是看不到的。先导入一份单词表 JSON，或用内置示例词直接开背：</p>
+        <div class="row">
+          <button class="btn primary" id="v-empty-import">⬆ 导入单词表</button>
+          <button class="btn ghost" id="v-empty-sample">试用示例词（10 词）</button>
+        </div>
+      </div>` : ''}
+
       <div class="card">
         <h3 class="card-title">开始背诵</h3>
         <div class="row">
@@ -286,6 +312,14 @@ const Vocab = {
     $('#v-start-new').onclick = () => this.startSession('new');
     $('#v-start-review').onclick = () => this.startSession('review');
     $('#v-import').onclick = () => this.importDialog();
+    const emptyImport = $('#v-empty-import');
+    if (emptyImport) emptyImport.onclick = () => this.importDialog();
+    const emptySample = $('#v-empty-sample');
+    if (emptySample) emptySample.onclick = () => {
+      const r = Store.loadSampleVocab();
+      toast(`已载入示例词库：新增 ${r.added} 词`, 'ok');
+      this.render();
+    };
 
     if (!this.cal || this.cal.year !== new Date().getFullYear() || this.cal.month !== new Date().getMonth() + 1) {
       const n = new Date();

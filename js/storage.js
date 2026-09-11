@@ -233,6 +233,11 @@ const Store = {
     flags.sampleV = V;
   },
 
+  /* 手机等新设备一键载入内置示例词表（防重复，不碰已导入数据） */
+  loadSampleVocab() {
+    return this.addWords(SAMPLE_VOCAB);
+  },
+
   addWrong(q, bankId) {
     const bank = this.data.banks.find(b => b.id === bankId);
     const key = (bankId || 'unknown') + '/' + q.id;

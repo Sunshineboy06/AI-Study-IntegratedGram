@@ -224,3 +224,17 @@ const OUTLINE_TEMPLATE = [
   '- 知识点：一句说明',
   '',
 ].join('\n');
+
+/* ---------- 内置示例单词表（手机等新设备一键试用） ---------- */
+const SAMPLE_VOCAB = [
+  { word: 'abandon', phonetic: '/əˈbændən/', pos: 'v.', meaning: '放弃，抛弃', example: 'He abandoned the plan at the last minute.' },
+  { word: 'benefit', phonetic: '/ˈbenɪfɪt/', pos: 'n./v.', meaning: '好处；使受益', example: 'Regular exercise benefits your health.' },
+  { word: 'curious', phonetic: '/ˈkjʊəriəs/', pos: 'adj.', meaning: '好奇的', example: 'She was curious about the new student.' },
+  { word: 'determine', phonetic: '/dɪˈtɜːmɪn/', pos: 'v.', meaning: '决定；下定决心', example: 'They determined to finish the project early.' },
+  { word: 'evidence', phonetic: '/ˈevɪdəns/', pos: 'n.', meaning: '证据', example: 'There is no evidence to support his claim.' },
+  { word: 'frequent', phonetic: '/ˈfriːkwənt/', pos: 'adj.', meaning: '频繁的', example: 'Frequent practice makes words stick.' },
+  { word: 'gradually', phonetic: '/ˈɡrædʒuəli/', pos: 'adv.', meaning: '逐渐地', example: 'The weather gradually warmed up.' },
+  { word: 'habit', phonetic: '/ˈhæbɪt/', pos: 'n.', meaning: '习惯', example: 'Reviewing daily becomes a habit quickly.' },
+  { word: 'improve', phonetic: '/ɪmˈpruːv/', pos: 'v.', meaning: '改进，提高', example: 'Reading improves your vocabulary a lot.' },
+  { word: 'journey', phonetic: '/ˈdʒɜːni/', pos: 'n.', meaning: '旅程', example: 'Learning is a long journey, not a race.' },
+];
