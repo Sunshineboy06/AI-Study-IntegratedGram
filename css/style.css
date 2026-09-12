@@ -408,6 +408,7 @@ main { max-width: 1200px; margin: 40px auto 96px; padding: 0 24px; }
   background: var(--gradient-hero-full);
   padding: calc(var(--nav-stack) + 44px) 24px 48px;
   margin: calc(-1 * var(--nav-stack)) min(0px, calc(-50vw + 600px)) 28px;
+  border-radius: 0 0 var(--radius-3xl) var(--radius-3xl);   /* 底部两角圆角，与首页 Hero 一致 */
 }
 .page-sub { margin: -8px 0 24px; }
 
@@ -1284,7 +1285,7 @@ html.dark .seg button.active { background: var(--color-periwinkle-mist); color: 
   text-align: center;
   background: var(--gradient-hero-full);
   border: none;
-  border-radius: 0;
+  border-radius: 0 0 var(--radius-3xl) var(--radius-3xl);   /* 底部两角圆角，蓝色收尾不再生硬 */
   /* 上内边距 = 公告条+顶栏高度 + 视觉留白，让内容不被浮在上面的导航压住 */
   padding: calc(var(--nav-stack) + 72px) max(24px, calc(50vw - 560px)) 88px;
   /* Breakout：平台容器 max-width 1200 + 两侧 24 padding，故 -600 可横跨视口。
