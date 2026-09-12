@@ -2,36 +2,25 @@
 
 /* ---------- 首页：板块化动态展示（route 预留路由变量） ---------- */
 const FEATS = [
-  { route: 'data', badge: '01 · 导入学习内容', icon: '📦',
-    title: '第三方 AI 生成，一键导入',
-    desc: '用「数据管理」页内置的固定提示词，在自己的第三方 AI 里生成题库、脑图、单词表，回来上传即可。',
-    bullets: ['三份固定提示词一键复制 / 下载（题库 JSON、大纲 Markdown、单词表）',
-              '兼容 Kimi、ChatGPT、豆包等任意主流 AI',
-              '导入自动校验格式，已有单词/题库自动防重复'],
-    mock: 'import' },
-  { route: 'vocab', badge: '02 · 背单词', icon: '🔤',
-    title: '艾宾浩斯曲线驱动的单词背诵',
+  { route: 'vocab', badge: '01 · 背单词', title: '艾宾浩斯曲线驱动的单词背诵',
     desc: '陌生、学习中、完全背诵三色标签，科学安排每一次复习。',
     bullets: ['Azure Natural 拟真人声朗读，美式 / 英式可切换',
               '自定义词库导入，自动防重复、保留学习进度',
               '学习日历与七天柱状图，进度一目了然'],
     mock: 'word' },
-  { route: 'setup', badge: '03 · 刷题练习', icon: '✏️',
-    title: '自由组卷，随堂自测',
+  { route: 'setup', badge: '02 · 刷题练习', title: '自由组卷，随堂自测',
     desc: '题库交给 AI，也交给你自己——题型、数量、限时自由搭配。',
     bullets: ['单选 / 多选 / 填空 / 简答数量自由组合',
               '章节筛选、随机顺序、限时倒计时',
               '答错自动归档，一步不错过'],
     mock: 'quiz' },
-  { route: 'mindmap', badge: '04 · 总复习脑图', icon: '🧠',
-    title: '知识框架，一眼到底',
+  { route: 'mindmap', badge: '03 · 总复习脑图', title: '知识框架，一眼到底',
     desc: 'Markdown 大纲一键生成交互式脑图，由广入深逐层展开。',
     bullets: ['知识点直接关联题目，点击即练',
               '展开 / 收起 / 缩放，复习节奏自己掌控',
               '与题库章节联动，学练闭环'],
     mock: 'map' },
-  { route: 'wrongbook', badge: '05 · 错题本', icon: '📓',
-    title: '错题归集，针对性复盘',
+  { route: 'wrongbook', badge: '04 · 错题本', title: '错题归集，针对性复盘',
     desc: '答错即收录，错误次数自动累计，考前重做一遍最安心。',
     bullets: ['错题自动归集，按题库溯源',
               '记录错误次数与最近错误时间',
@@ -41,12 +30,6 @@ const FEATS = [
 
 /* ---------- 板块动态演示 mock（纯 CSS 动画，配色全部来自现有令牌） ---------- */
 function featMock(kind) {
-  if (kind === 'import') return `
-    <div class="mock m-import">
-      <div class="mk-step">📋 复制固定提示词</div>
-      <div class="mk-step">🤖 交给你的第三方 AI</div>
-      <div class="mk-step">📦 上传生成的文件，直接开学</div>
-    </div>`;
   if (kind === 'word') return `
     <div class="mock m-word">
       <div class="mk-whead">今日 · 待复习 <span>🔊</span></div>
@@ -112,12 +95,12 @@ function renderHome() {
   $('#main').innerHTML = `
     <section class="hero2">
       <div class="hero2-l">
-        <span class="pill-badge">🎓 本地优先 · 数据不出设备</span>
+        <span class="pill-badge">本地优先 · 数据不出设备</span>
         <h1>学、练、背，<br>一个平台完成</h1>
         <p>当前课程「<b>${esc(folderName)}</b>」：题库 <b>${banks.length}</b> · 大纲 <b>${outlines.length}</b> · 单词 <b>${vocabCount}</b>。<br>所有数据保存在本机浏览器中，随时备份迁移。</p>
-        <div class="hero2-actions">
-          <button class="btn primary lg" id="h-vocab">🔤 背单词</button>
-          <button class="btn secondary lg" id="h-data">📦 导入 / 管理数据</button>
+        <div class="hero2-actions glass-group">
+          <button class="btn primary lg" id="h-vocab">背单词</button>
+          <button class="btn lg" id="h-data">导入数据</button>
         </div>
         <div class="hero2-links">
           <button class="feat-link" id="h-quiz">开始刷题 →</button>
@@ -140,6 +123,8 @@ function renderHome() {
       </div>
     </section>
 
+    <div class="hero-tail"></div>
+
     <div class="stat-grid">
       <div class="card stat" id="s-vocab"><b>${vocabCount}</b><span>单词词库</span></div>
       <div class="card stat" id="s-bank"><b>${banks.length}</b><span>题库</span></div>
@@ -159,7 +144,6 @@ function renderHome() {
     <details class="card help">
       <summary>📖 规则说明</summary>
       <ul>
-        <li><b>AI生成</b>：上传课堂笔记，大模型生成思维导图与自测题，完成后<b>自动</b>存入当前课程文件夹。</li>
         <li><b>课程文件夹</b>：顶栏切换；刷题、总复习、错题本都只使用该文件夹内的题库与大纲。</li>
         <li><b>刷题</b>：自由组卷、限时可选；答错自动进错题本。</li>
         <li><b>背单词</b>：艾宾浩斯曲线安排复习；Azure Natural 语音朗读。</li>

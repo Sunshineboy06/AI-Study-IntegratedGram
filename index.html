@@ -21,14 +21,16 @@ try {
   <span>NOTES → MINDMAP · QUIZ · VOCABULARY</span>
   <span class="a-pill">127.0.0.1:8796</span>
 </div>
-<header class="topbar">
-  <div class="brand">🎓 AI学习一体化平台</div>
-  <div class="folderbar" id="folderbar">
-    <span class="folder-label">📁</span>
-    <select id="folder-select" title="选择课程文件夹，之后刷题/复习/错题本都只使用该文件夹内的数据"></select>
-    <button class="btn ghost sm" id="folder-manage" title="管理课程文件夹">管理</button>
+<header class="topbar" id="topbar">
+  <div class="tb-left">
+    <a class="brand" href="#" data-view="home"><span class="brand-mark" aria-hidden="true"></span>AI学习一体化平台</a>
+    <div class="folderbar" id="folderbar">
+      <span class="folder-label" aria-hidden="true"></span>
+      <select id="folder-select" title="选择课程文件夹，之后刷题/复习/错题本都只使用该文件夹内的数据"></select>
+      <button class="btn ghost sm" id="folder-manage" title="管理课程文件夹">管理</button>
+    </div>
   </div>
-  <nav class="tabs">
+  <nav class="tabs" id="main-tabs">
     <button data-view="home" class="active">首页</button>
     <button data-view="vocab">背单词</button>
     <button data-view="setup">刷题</button>
@@ -36,7 +38,9 @@ try {
     <button data-view="wrongbook">错题本</button>
     <button data-view="data">数据管理</button>
   </nav>
-  <button class="btn ghost sm" id="theme-toggle" title="切换深浅色主题">🌙 夜间</button>
+  <div class="tb-right">
+    <button class="btn ghost sm" id="theme-toggle" title="切换深浅色主题">◐ 夜间</button>
+  </div>
 </header>
 
 <main id="main"></main>

@@ -11,13 +11,14 @@ const App = {
       Quiz.abort();
     }
     $$('.tabs button').forEach(b => b.classList.toggle('active', b.dataset.view === name));
+    /* 首页：全屏蓝 Hero 从页面顶端铺起，顶部公告条让位（黑色横条会割裂首屏） */
+    document.body.classList.toggle('view-home', name === 'home');
     const r = this.views[name];
     if (r) r();
   },
 };
 
-/* ---------- 顶栏课程文件夹选择器 ---------- */
-function renderFolderBar() {
+/* ---------- 顶栏课程文件夹选择器 ---------- */function renderFolderBar() {
   const sel = $('#folder-select');
   if (!sel) return;
   const opts = [{ id: '__all__', name: '全部课程' }]
@@ -40,8 +41,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const applyTheme = dark => {
     document.documentElement.classList.toggle('dark', dark);
     try { localStorage.setItem('platform.theme', dark ? 'dark' : 'light'); } catch (e) { /* 忽略 */ }
-    /* 图标反映当前主题：浅色显示白天、深色显示夜间 */
-    themeBtn.textContent = dark ? '🌙 夜间' : '☀️ 日间';
+    /* 图标反映当前主题：用单色几何符号，避免 emoji 自带彩色破坏单色体系 */
+    themeBtn.textContent = dark ? '◐ 夜间' : '◑ 日间';
     themeBtn.title = dark ? '当前为夜间模式，点击切换' : '当前为日间模式，点击切换';
   };
   applyTheme(document.documentElement.classList.contains('dark'));
@@ -56,6 +57,20 @@ window.addEventListener('DOMContentLoaded', () => {
       clearTimeout(scrollTimer);
       scrollTimer = setTimeout(() => document.body.classList.remove('is-scrolling'), 120);
     }, { passive: true });
+  }
+
+  /* 顶栏下滑收缩：滚动超过阈值后收紧间距，但始终保持居中对称 */
+  const topbar = $('#topbar');
+  if (topbar) {
+    let ticking = false;
+    const syncTopbar = () => {
+      topbar.classList.toggle('is-compact', window.scrollY > 64);
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(syncTopbar); }
+    }, { passive: true });
+    syncTopbar();
   }
 
   // 保活长连接：浏览器窗口/标签页全部关闭后，本地服务器据此自动退出
