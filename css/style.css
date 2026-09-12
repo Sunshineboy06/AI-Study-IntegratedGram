@@ -1620,6 +1620,23 @@ html.dark .feat-blob { opacity: .3; }
 main > * { transition: filter .3s ease; }
 body.is-scrolling main > * { filter: blur(2px); }
 
+/* ================= 移动端性能：砍掉全屏模糊 =================
+   手机 GPU 对整屏 filter: blur 代价很高：刷新载入时 viewIn 的 blur(10px)
+   飞入、滚动恢复触发的高斯模糊，让整页肉眼可见地发糊掉帧（用户实测反馈）。
+   触屏 / 窄屏下动画只保留位移 + 淡入，模糊全部移除；桌面端维持原样。 */
+@media (max-width: 900px), (pointer: coarse) {
+  @keyframes viewIn {
+    from { opacity: 0; transform: translateX(18px); }
+    to { opacity: 1; transform: none; }
+  }
+  main > * { transition: none; }
+  body.is-scrolling main > * { filter: none; }
+  /* html 前缀提特异性：基础规则源序在本块之后，同特异性会被它盖回 */
+  html .home-sects-head,
+  html .feat .feat-text > *,
+  html .feat .feat-visual { filter: none; will-change: auto; }
+}
+
 /* 由远及近飞入：初始在远处（缩小+后移）+ 高斯模糊 + 透明 */
 .home-sects { perspective: 1100px; }
 .home-sects-head,
