@@ -250,7 +250,7 @@ body.view-home .folderbar { display: none; }   /* 首页：左上角课程/数�
 .topbar.is-compact .tabs button { color: var(--color-charcoal); }
 .topbar.is-compact .brand { color: var(--color-ink); }
 .topbar.is-compact .tabs button:hover { color: var(--color-off-black); background: var(--color-cloud-gray); }
-.topbar.is-compact .tabs button.active { background: var(--color-obsidian); color: #ffffff; }
+.topbar.is-compact .tabs button.active { background: var(--color-sky-tint); color: var(--color-ink); }   /* 选中态用淡蓝面，不再变黑胶囊 */
 .topbar.is-compact .folder-label { color: var(--color-charcoal); }
 .topbar.is-compact .folderbar select {
   background: var(--card-solid); color: var(--color-ink); border-color: var(--color-ash);
