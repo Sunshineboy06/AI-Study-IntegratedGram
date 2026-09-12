@@ -182,6 +182,7 @@ const Quiz = {
 
   renderRunner() {
     $('#main').innerHTML = `
+      <h2 class="page-title">刷题进行中</h2>
       <div class="card runner-top">
         <button class="btn ghost sm" id="q-quit">✕ 退出</button>
         <div class="q-progress">第 <b id="q-cur">1</b> / ${this.paper.length} 题</div>
