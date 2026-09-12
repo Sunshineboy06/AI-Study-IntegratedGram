@@ -1,50 +1,44 @@
 /* =========================================================
-   AI学习一体化平台 — Letters 风格
-   morning clinic under open sky
-   画布：Paper White #ffffff（纯白），Hero 为天空渐变带
-   标题：几何人文无衬线（Open Runde 风格），大号紧字距
-   主操作：Obsidian #070709 黑药丸 —— 永远不用彩色做按钮
-   强调：Surgical Blue #2597d0 仅用于图标/进度条等微图形
-   边框：1px #bebecc 发丝线；按钮 100px 药丸、卡片 18px 圆角
+   AI学习一体化平台 — Monad 风格
+   editorial tech journal on warm parchment
+   画布：Parchment #f6f3f1（绝不用纯白）
+   标题：衬线体 400 weight，永不加粗
+   UI 全部：等宽字体 + 大写 + 紧字距
+   强调：Lake Blue #2b59d1 仅用于每屏唯一主操作
+   边框：1px Ash #cecac8 发丝线；按钮 100px 药丸、卡片 40px 圆角
    ========================================================= */
 :root {
   color-scheme: light;   /* 原生控件（文件选择器 / 滚动条 / 下拉列表）跟随浅色 */
-  /* Colors — Letters palette */
-  --color-paper: #ffffff;                     /* Paper White 画布 */
-  --color-obsidian: #070709;                  /* Obsidian 主文字 / 实心按钮 */
-  --color-charcoal: #4c4c55;                  /* Charcoal 正文 */
-  --color-surgical: #2597d0;                  /* Surgical Blue 图标与微图形 */
-  --color-slate: #8b8b8b;                     /* Slate 三级文字 / 占位 / 悬停边框 */
-  /* 兼容旧令牌名（全站组件引用，换肤只动这里） */
-  --color-parchment: var(--color-paper);      /* 画布 → 纯白 */
-  --color-off-black: var(--color-obsidian);   /* 主文字 → Obsidian */
-  --color-graphite: var(--color-charcoal);    /* 正文 → Charcoal */
-  --color-ink: #151515;
-  /* 弱化文字：白画布上 ≥5.5:1（原 #666463 偏暖，改冷灰） */
-  --color-smoke: #66666e;
-  --color-ash: #bebecc;                       /* 发丝线 */
-  /* 文字级强调蓝：Sky Tint 底上 ≥4.5:1（纯 #2597d0 仅 2.7:1，只给图形用） */
-  --color-lake-blue: #146a94;
-  --color-periwinkle-mist: #d7e6f5;           /* Sky Tint 淡蓝面 */
-  --color-sky-blue: #8fbcd9;
+  /* Colors */
+  --color-parchment: #f6f3f1;
+  --color-lake-blue: #2b59d1;
+  /* 雾蓝底：其上的湖蓝小字需 ≥4.5:1（原 #cfdaf5 仅 4.34:1） */
+  --color-periwinkle-mist: #d5dff7;
+  --color-sky-blue: #a0b5eb;
   --color-mint: #a7fccd;
   --color-coral: #ff9473;
   --color-gold: #ecda98;
   --color-crimson: #f37a0a;
+  --color-off-black: #242424;
+  --color-ink: #000000;
+  --color-graphite: #4e4d4d;
+  /* 弱化文字：须在画布/ash-25/ash-30 三种底上均 ≥4.5:1（原 #797776 最差仅 3.61:1） */
+  --color-smoke: #666463;
+  --color-ash: #cecac8;
 
-  /* 功能反馈色（仅用于对错/警告等语义状态） */
+  /* 功能反馈色（暖色调衍生，仅用于对错/警告等语义状态） */
   --functional-green: #256d3d;
   --functional-green-bg: #e3f5e8;
   --functional-red: #b3402a;
   --functional-red-bg: #f9e7e2;
 
   /* 色调衍生（浅色值在此，深色模式在 html.dark 整体覆写） */
-  --color-lake-fill: #2597d0;                 /* 进度条/波形类功能性填充（微图形蓝） */
-  --tint-periwinkle: rgba(37, 151, 208, .08); /* 淡蓝底：例句 / 脑图注 / 拖拽区 */
-  --tint-ash-25: rgba(190, 190, 204, .25);    /* 淡灰底：表头 / 弱提示 */
-  --tint-ash-30: rgba(190, 190, 204, .30);    /* 淡灰底：行内 code / 来源标签 */
-  --tint-ash-35: rgba(190, 190, 204, .35);    /* 淡灰底：页签悬停 */
-  --tint-hover: rgba(7, 7, 9, .06);           /* 描边按钮悬停的加深底 */
+  --color-lake-fill: #2b59d1;                 /* 实心按钮/进度填充用 */
+  --tint-periwinkle: rgba(43, 89, 209, .07);  /* 淡蓝底：例句 / 脑图注 / 拖拽区 */
+  --tint-ash-25: rgba(206, 202, 200, .25);    /* 淡灰底：表头 / 弱提示 */
+  --tint-ash-30: rgba(206, 202, 200, .30);    /* 淡灰底：行内 code / 来源标签 */
+  --tint-ash-35: rgba(206, 202, 200, .35);    /* 淡灰底：页签悬停 */
+  --tint-hover: rgba(36, 36, 36, .06);        /* 描边按钮悬停的加深底 */
   /* 珊瑚底透明度上限由对比度决定：.favw 上的红字 #b3402a 需 ≥4.5:1 */
   --tint-coral: rgba(255, 148, 115, .10);         /* 珊瑚底：收藏行 */
   --tint-coral-strong: rgba(255, 148, 115, .20);  /* 珊瑚底（强）：收藏词高光 / 填空题徽标 */
@@ -52,20 +46,17 @@
   --mint-text: #1e6b45;                       /* 薄荷底上的深字 */
   --coral-text: #8f431e;                      /* 珊瑚底上的深字 */
   --on-functional: #ffffff;                   /* 功能色实心块上的字（深色模式反过来用深字） */
-  /* 永久反色面板：公告条底色恒为 Obsidian，不随主题反转 */
-  --ink-panel-bg: #070709;
-  --ink-panel-fg: #ffffff;
-  --veil-base: 255, 255, 255;
-  --thumb-bg: rgba(7, 7, 9, .08);             /* 滑块 / 占位底色 */
-  /* 天空渐变（仅 Hero 使用，其余区域保持白/云灰） */
-  --gradient-sky: linear-gradient(180deg, #779bc1 0%, #9abfda 58%, #cbdcec 100%);
+  /* 永久反色面板：公告条底色恒为深黑，不随主题反转，故不给 html.dark 覆写 */
+  --ink-panel-bg: #000000;
+  --ink-panel-fg: #f6f3f1;
+  --veil-base: 246, 243, 241;
+  --thumb-bg: rgba(0, 0, 0, .08);             /* 滑块 / 占位底色 */
 
-  /* Typography — Open Runde 风格几何人文无衬线（本地回退，免外网字体） */
-  --font-sans: 'Manrope', 'Inter Tight', 'Inter', ui-sans-serif, system-ui,
-    -apple-system, 'Segoe UI', 'Microsoft YaHei UI', 'Microsoft YaHei', 'PingFang SC', sans-serif;
-  /* 旧令牌名沿用（mono→UI 无衬线，serif→标题无衬线），一次性完成字体迁移 */
-  --font-mono: var(--font-sans);
-  --font-serif: var(--font-sans);
+  /* Typography */
+  --font-mono: 'ABC Diatype Mono', 'JetBrains Mono', 'IBM Plex Mono', 'Space Mono',
+    ui-monospace, 'Cascadia Mono', Consolas, 'Courier New', 'Microsoft YaHei', monospace;
+  --font-serif: 'Untitled Serif', ui-serif, Georgia, Cambria, 'Times New Roman',
+    'STZhongsong', SimSun, serif;
 
   /* Spacing */
   --spacing-8: 8px;
@@ -76,42 +67,28 @@
   --spacing-64: 64px;
 
   /* Layout */
-  --page-max-width: 1200px;
-  --section-gap: 80px;
+  --page-max-width: 1432px;
+  --section-gap: 64px;
   --card-padding: 40px;
   --element-gap: 16px;
 
-  /* Radius：按钮/页签 100px 药丸，卡片 18px，输入 12px，图标 8px */
-  --radius-cards: 18px;
+  /* Radius */
+  --radius-cards: 40px;
   --radius-buttons: 100px;
   --radius-pills: 9999px;
-  --radius-2xl: 12px;
-  --radius-hero: 32px;
+  --radius-2xl: 16px;
 
-  /* Shadow */
-  --shadow-subtle: rgba(228, 229, 231, .24) 0 1px 2px 0;
-  /* 药丸按钮的四层柔和投影（设计规范原文） */
-  --shadow-pill: rgba(36, 36, 40, .10) 0 1px 2px 0,
-                 rgba(36, 36, 40, .09) 0 3px 3px 0,
-                 rgba(36, 36, 40, .05) 0 6px 4px 0,
-                 rgba(36, 36, 40, .01) 0 11px 4px 0;
-  /* 特色卡片的蓝色大气投影（低透明 + 大模糊，禁止高不透明度灰影） */
-  --shadow-xl: rgba(16, 55, 132, .03) 0 17px 37px 0,
-               rgba(16, 55, 132, .03) 0 67px 67px 0,
-               rgba(16, 55, 132, .02) 0 150px 90px 0;
-  /* 悬浮层（弹窗 / Toast） */
-  --shadow-md: rgba(36, 36, 40, .10) 0 1px 2px 0,
-               rgba(36, 36, 40, .08) 0 6px 20px 0;
+  /* Shadow（仅悬浮层使用，卡片禁用阴影） */
+  --shadow-md: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px;
 
   /* 背单词：自评后答案区 / 例句目标词高亮（浅色值，深色模式在下文覆写） */
-  --v-answer-bg: #eef6fc;
-  --v-answer-line: #bcd9ec;
-  --v-hl-bg: #d7e6f5;
-  --v-hl-text: #14506e;
+  --v-answer-bg: #fbf4dc;
+  --v-answer-line: #e8d79a;
+  --v-hl-bg: #ecda98;
+  --v-hl-text: #4a3c0e;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
-html { overflow-x: clip; }   /* Hero 通栏 breakout 不产生横向滚动条（clip 不破坏 sticky） */
 body {
   font-family: var(--font-mono);
   background: var(--color-parchment);
@@ -121,28 +98,28 @@ body {
 }
 h1, h2, h3, h4 {
   font-family: var(--font-serif);
-  font-weight: 600;
-  letter-spacing: -0.03em;
+  font-weight: 400;
+  letter-spacing: -0.02em;
 }
 ::selection { background: var(--color-periwinkle-mist); color: var(--color-off-black); }
 
-/* ---------- 天空色氛围光晕（Sky Tint → Surgical Blue，垫在内容后） ---------- */
+/* ---------- 装饰性渐变光晕（Coral → Sky Blue，重度模糊，垫在内容后） ---------- */
 .wash {
   position: fixed;
   width: 620px; height: 620px;
   border-radius: 50%;
   filter: blur(90px);
-  opacity: .38;
+  opacity: .5;
   pointer-events: none;
   z-index: 0;
 }
 .wash-a {
   top: -180px; right: -120px;
-  background: radial-gradient(circle at 30% 30%, rgba(119, 155, 193, .75), rgba(215, 230, 245, .8) 70%);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 148, 115, .8), rgba(160, 181, 235, .8) 70%);
 }
 .wash-b {
   bottom: -260px; left: -180px;
-  background: radial-gradient(circle at 60% 40%, rgba(37, 151, 208, .5), rgba(203, 220, 236, .6) 75%);
+  background: radial-gradient(circle at 60% 40%, rgba(167, 252, 205, .65), rgba(160, 181, 235, .6) 75%);
 }
 main, .topbar, #toast-box { position: relative; z-index: 1; }
 
@@ -156,7 +133,7 @@ main, .topbar, #toast-box { position: relative; z-index: 1; }
 }
 .announce .a-spacer { flex: 1; }
 .announce .a-pill {
-  border: 1px solid rgba(255, 255, 255, .6); border-radius: 9999px;
+  border: 1px solid rgba(246, 243, 241, .6); border-radius: 9999px;
   padding: 2px 12px; font-size: 11px; color: inherit;
   text-decoration: none; white-space: nowrap;
 }
@@ -169,7 +146,7 @@ button { font-family: inherit; color: inherit; }
   position: sticky; top: 0; z-index: 40;
   display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
   padding: 16px 32px;
-  background: rgba(255, 255, 255, .8);
+  background: rgba(246, 243, 241, .78);
   backdrop-filter: blur(16px) saturate(1.25);
   -webkit-backdrop-filter: blur(16px) saturate(1.25);
   border-bottom: 1px solid var(--color-ash);
@@ -180,10 +157,10 @@ button { font-family: inherit; color: inherit; }
   white-space: nowrap;
   display: inline-flex; align-items: center; gap: 10px;
 }
-/* 圆形点标（wordmark + dot mark，Surgical Blue 装饰点） */
+/* 圆形点标（wordmark + dot mark） */
 .brand::after {
   content: ''; width: 12px; height: 12px; border-radius: 9999px;
-  background: var(--color-surgical); display: inline-block;
+  background: var(--color-lake-blue); display: inline-block;
 }
 .tabs { display: flex; gap: 4px; flex-wrap: wrap; }
 .tabs button {
@@ -198,18 +175,17 @@ button { font-family: inherit; color: inherit; }
   border-color: var(--color-off-black);
 }
 
-main { max-width: 1200px; margin: 40px auto 96px; padding: 0 24px; }
+main { max-width: 1160px; margin: 40px auto 96px; padding: 0 24px; }
 .page-title { font-size: 40px; margin: 8px 0 16px; line-height: 1.2; }
 .page-sub { margin: -8px 0 24px; }
 
-/* ---------- 卡片（白面 + 发丝边 + 蓝色大气投影） ---------- */
+/* ---------- 卡片 ---------- */
 .card {
-  background: var(--color-paper);
+  background: var(--color-parchment);
   border: 1px solid var(--color-ash);
   border-radius: var(--radius-cards);
   padding: 32px;
   margin-bottom: 24px;
-  box-shadow: var(--shadow-xl);
 }
 .card-title { margin: 0 0 16px; font-size: 24px; line-height: 1.2; }
 .muted { color: var(--color-smoke); font-size: 12px; letter-spacing: .02em; }
@@ -224,12 +200,11 @@ main { max-width: 1200px; margin: 40px auto 96px; padding: 0 24px; }
   text-decoration: none;
 }
 .btn:hover { background: var(--tint-hover); }
-.btn.primary { background: var(--color-obsidian); border-color: var(--color-obsidian); color: var(--color-paper); box-shadow: var(--shadow-pill); }
-.btn.primary:hover { background: #232329; border-color: #232329; }
-html.dark .btn.primary:hover { background: #d5d8de; border-color: #d5d8de; }
-/* 屏内次要按钮：Obsidian 描边幽灵款（设计规范 Outlined Ghost） */
-.btn.secondary { background: transparent; border-color: var(--color-obsidian); color: var(--color-obsidian); }
-.btn.secondary:hover { background: var(--tint-hover); }
+.btn.primary { background: var(--color-lake-fill); border-color: var(--color-lake-fill); color: #fff; }
+.btn.primary:hover { background: var(--color-lake-fill-hover, #2349b8); }
+/* 屏内次要实心按钮（Off-Black）：通过 .secondary 指定，避免分散 Lake Blue */
+.btn.secondary { background: var(--color-off-black); border-color: var(--color-off-black); color: var(--color-parchment); }
+.btn.secondary:hover { background: #3a3a3a; }
 .btn.ghost { border-color: var(--color-ash); background: transparent; color: var(--color-graphite); }
 .btn.ghost:hover { border-color: var(--color-off-black); color: var(--color-off-black); background: transparent; }
 .btn.danger { background: var(--functional-red); border-color: var(--functional-red); color: var(--on-functional); }
@@ -275,8 +250,8 @@ textarea { width: 100%; resize: vertical; line-height: 1.7; }
 .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
 .stat { text-align: center; padding: 28px 20px; cursor: pointer; }
 .stat b {
-  display: block; font-size: 40px; color: var(--color-obsidian);
-  font-family: var(--font-serif); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1;
+  display: block; font-size: 40px; color: var(--color-off-black);
+  font-family: var(--font-serif); font-weight: 400; letter-spacing: -0.02em; line-height: 1.1;
 }
 .stat span { color: var(--color-smoke); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
 .stat.warnstat b { color: var(--functional-red); }
@@ -317,7 +292,7 @@ textarea { width: 100%; resize: vertical; line-height: 1.7; }
 .pbar { height: 4px; background: var(--color-ash); border-radius: 9999px; overflow: hidden; margin-bottom: 20px; }
 .pbar i {
   display: block; height: 100%; width: 0;
-  background: var(--color-surgical);   /* 波形/进度 = Surgical Blue 的功能性表达 */
+  background: var(--color-off-black);
   border-radius: 9999px; transition: width .3s;
 }
 .qcard { min-height: 320px; }
@@ -422,7 +397,7 @@ textarea { width: 100%; resize: vertical; line-height: 1.7; }
 .score-ring b {
   position: absolute; inset: 0; display: flex;
   align-items: center; justify-content: center; font-size: 40px;
-  font-family: var(--font-serif); font-weight: 600; letter-spacing: -0.03em;
+  font-family: var(--font-serif); font-weight: 400;
 }
 .type-stats { border-collapse: collapse; margin-top: 10px; }
 .type-stats th, .type-stats td {
@@ -609,8 +584,7 @@ dialog[open] { animation: dlgIn .38s cubic-bezier(.22, .9, .3, 1); }
   cursor: pointer;
   transition: border-color .15s, background .15s;
 }
-.dz:hover { border-color: var(--color-slate); }          /* 设计规范：悬停仅边框加深 */
-.dz.over { border-color: var(--color-surgical); background: var(--tint-periwinkle); }  /* 拖入时给功能性反馈 */
+.dz:hover, .dz.over { border-color: var(--color-lake-blue); background: var(--tint-periwinkle); }
 .dz .dz-icon { font-size: 32px; }
 .dz .dz-main { margin-top: 8px; font-size: 14px; text-transform: uppercase; letter-spacing: .05em; }
 .dz .dz-hint { color: var(--color-smoke); font-size: 12px; margin-top: 6px; }
@@ -769,27 +743,25 @@ dialog[open] { animation: dlgIn .38s cubic-bezier(.22, .9, .3, 1); }
 .v-row.fav { background: var(--tint-coral); }
 .v-row .favw { color: var(--functional-red); background: var(--tint-coral-strong); border-radius: 9999px; padding: 0 10px; }
 
-/* ================= 深色模式（夜间学习，Letters 冷调夜空版） ================= */
+/* ================= 深色模式（夜间学习） ================= */
 html.dark {
   color-scheme: dark;    /* 原生控件 / 滚动条 / 下拉列表一并变深，否则夜里会闪出白块 */
-  --color-paper: #16181d;                     /* 夜空画布（冷调近黑） */
-  --color-obsidian: #f0f2f5;                  /* 反转：主文字变亮 */
-  --color-charcoal: #b6bac2;
-  --color-surgical: #5db4e0;                  /* 夜间微图形蓝（提亮保对比） */
-  --color-ink: #f0f2f5;
-  /* 弱化文字：深色底上 ≥4.5:1 */
-  --color-smoke: #9298a3;
-  --color-ash: #33363d;
-  /* 文字级强调蓝（夜间提亮，Sky Tint 暗底上仍清晰） */
-  --color-lake-blue: #7cc4e8;
-  --color-periwinkle-mist: #22384d;           /* 淡蓝面（暗） */
-  --color-sky-blue: #3f6a8a;
-  --color-lake-fill: #2597d0;
-  --color-lake-fill-hover: #3aa5dc;
+  --color-parchment: #1b1917;
+  --color-lake-blue: #8aa6f2;
+  --color-lake-fill: #3d63d6;
+  --color-lake-fill-hover: #4d72e2;
+  --color-periwinkle-mist: #2b3757;
+  --color-sky-blue: #4a5f8f;
   --color-mint: #1f4a38;
   --color-gold: #4a3d1e;
   --color-coral: #8a4a33;
   --color-crimson: #b3602f;
+  --color-off-black: #ece7e1;
+  --color-ink: #0d0c0b;
+  --color-graphite: #b9b3ac;
+  /* 弱化文字：深色下原 #857f78 在 ash 底上仅 3.63:1 */
+  --color-smoke: #9d9790;
+  --color-ash: #3b3733;
 
   --functional-green: #7fd4a1;
   --functional-green-bg: rgba(127, 212, 161, .14);
@@ -797,27 +769,28 @@ html.dark {
   --functional-red-bg: rgba(255, 144, 119, .14);
   --on-functional: #0d0c0b;                   /* 深色下功能色是浅色，实心块上改用深墨（原 #fff 仅 1.8~2.2:1） */
 
-  --tint-periwinkle: rgba(93, 180, 224, .12);
-  --tint-ash-25: rgba(240, 242, 245, .07);
-  --tint-ash-30: rgba(240, 242, 245, .08);
-  --tint-ash-35: rgba(240, 242, 245, .09);
-  --tint-hover: rgba(240, 242, 245, .08);
+  --tint-periwinkle: rgba(138, 166, 242, .12);
+  --tint-ash-25: rgba(236, 231, 225, .07);
+  --tint-ash-30: rgba(236, 231, 225, .08);
+  --tint-ash-35: rgba(236, 231, 225, .09);
+  --tint-hover: rgba(236, 231, 225, .08);
   --tint-coral: rgba(255, 148, 115, .14);        /* 原浅色值缺失深色覆写，一并补上 */
   --tint-coral-strong: rgba(255, 148, 115, .22);  /* 上限同样由 .favw 红字对比度反推 */
   --gold-text: #ecd98f;
   --mint-text: #9defc0;
   --coral-text: #ffb290;
-  --veil-base: 22, 24, 29;
+  --veil-base: 27, 25, 23;
   --thumb-bg: rgba(255, 255, 255, .08);
 
   /* 背单词：自评答案区 / 例句高亮（深色值） */
-  --v-answer-bg: rgba(93, 180, 224, .10);
-  --v-answer-line: rgba(93, 180, 224, .32);
-  --v-hl-bg: rgba(93, 180, 224, .28);
-  --v-hl-text: #d9eefb;
+  --v-answer-bg: rgba(236, 217, 143, .10);
+  --v-answer-line: rgba(236, 217, 143, .32);
+  --v-hl-bg: rgba(236, 217, 143, .30);
+  --v-hl-text: #f5ead0;
 }
-html.dark .wash { opacity: .2; }
-html.dark .toast { background: var(--color-obsidian); color: var(--color-paper); box-shadow: rgba(0, 0, 0, .4) 0 0 12px 0; }
+html.dark .wash { opacity: .22; }
+html.dark .btn.secondary:hover { background: rgba(236, 231, 225, .85); }
+html.dark .toast { background: var(--color-off-black); color: var(--color-parchment); box-shadow: rgba(0, 0, 0, .4) 0 0 12px 0; }
 
 /* ================= 视图切换运动模糊 ================= */
 @keyframes viewIn {
@@ -848,7 +821,7 @@ main > *:nth-child(n+5) { animation-delay: .2s; }
   animation: spin .8s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-html.dark .topbar { background: rgba(22, 24, 29, .72); }
+html.dark .topbar { background: rgba(27, 25, 23, .72); }
 /* 深色下金底变暗，原 rgba(...,.4) 的浅金底会把金字压到 4.05:1，故减淡底色 */
 html.dark .ai-warn { background: rgba(236, 218, 152, .14); border-color: rgba(236, 218, 152, .35); }
 
@@ -911,60 +884,52 @@ html.dark .seg button.active { background: var(--color-periwinkle-mist); color: 
 .t-dot { fill: var(--color-lake-fill, var(--color-lake-blue)); }
 .t-vtxt { fill: var(--color-graphite); font-size: 10px; text-anchor: middle; font-family: var(--font-mono); }
 
-/* ================= 主页：天空渐变 Hero + 板块动态展示 ================= */
-/* Pill Tag：白底 1px 黑边 + Surgical Blue 图标位（设计规范 Pill Tag） */
+/* ================= 主页：双栏 Hero + 板块动态展示 ================= */
 .pill-badge {
   display: inline-block;
-  padding: 4px 14px;
-  border-radius: var(--radius-pills);
-  font-size: 12px;
-  letter-spacing: .02em;
-  background: var(--color-paper);
-  border: 1px solid var(--color-obsidian);
-  color: var(--color-obsidian);
+  padding: 3px 14px;
+  border-radius: 9999px;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  background: var(--color-periwinkle-mist);
+  color: var(--color-lake-blue);
 }
 
-/* ---- 双栏 Hero（通栏天空渐变带，内容居中于 1200px） ---- */
+/* ---- 双栏 Hero ---- */
 .hero2 {
   display: grid;
   grid-template-columns: 1.05fr .95fr;
   gap: 48px;
   align-items: center;
-  background: var(--gradient-sky);
-  border: none;
-  border-radius: 0 0 var(--radius-hero) var(--radius-hero);
-  padding: 72px max(24px, calc(50vw - 576px));
-  /* 负边距 Breakout：横跨视口全宽（main 有 24px 内边距与自动外边距） */
-  margin: -40px calc(50% - 50vw) 48px;
+  background: var(--color-parchment);
+  border: 1px solid var(--color-ash);
+  border-radius: var(--radius-cards);
+  padding: 48px;
+  margin-bottom: 32px;
   position: relative;
   overflow: hidden;
 }
 .hero2-l h1 {
-  font-size: clamp(38px, 4.8vw, 62px);
+  font-size: clamp(36px, 4.6vw, 58px);
   margin: 14px 0 16px;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-  color: #ffffff;
+  line-height: 1.12;
 }
-.hero2-l p { color: rgba(255, 255, 255, .92); font-size: 15px; line-height: 1.7; margin: 0 0 24px; max-width: 480px; }
-.hero2-l p b { color: #ffffff; }
+.hero2-l p { color: var(--color-graphite); font-size: 14px; line-height: 1.8; margin: 0 0 22px; }
+.hero2-l p b { color: var(--color-off-black); }
 .hero2-actions { display: flex; gap: 14px; flex-wrap: wrap; }
-.hero2-links { display: flex; gap: 6px 22px; flex-wrap: wrap; margin-top: 18px; }
-.hero2-links .feat-link { color: #ffffff; }
-/* 夜间：Hero 变暗夜空，保持氛围但降低亮度 */
-html.dark .hero2 { background: linear-gradient(180deg, #1d2c3d 0%, #24384c 58%, #2d4257 100%); }
-html.dark .feat:hover { background: rgba(93, 180, 224, .10); }
+.hero2-links { display: flex; gap: 6px 22px; flex-wrap: wrap; margin-top: 16px; }
 
-/* ---- 右侧动态模拟卡（今日·背单词）：白色纸卡浮于天空渐变上 ---- */
+/* ---- 右侧动态模拟卡（今日·背单词） ---- */
 .hero2-r { position: relative; }
 .hw-card {
   position: relative;
   z-index: 1;
-  background: var(--color-paper);
+  background: var(--color-parchment);
   border: 1px solid var(--color-ash);
   border-radius: var(--radius-cards);
   padding: 24px 26px;
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-md);
 }
 .hw-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 14px; }
 .hw-goal { margin-bottom: 14px; }
@@ -1012,7 +977,7 @@ html.dark .feat:hover { background: rgba(93, 180, 224, .10); }
   cursor: pointer;
   transition: background .2s ease;
 }
-.feat:hover { background: rgba(215, 230, 245, .4); }
+.feat:hover { background: rgba(207, 218, 245, .12); }
 .feat.flip .feat-text { order: 2; }
 .feat.flip .feat-visual { order: 1; }
 .feat-text { min-width: 0; }
@@ -1031,24 +996,24 @@ html.dark .feat:hover { background: rgba(93, 180, 224, .10); }
 }
 .feat-link:hover { text-decoration: underline; }
 
-/* ---- 模拟卡 + 背衬光晕（天空色系） ---- */
+/* ---- 模拟卡 + 背衬光晕 ---- */
 .feat-visual { position: relative; }
 .feat-blob {
   position: absolute;
   inset: -8% -4%;
   filter: blur(46px);
-  opacity: .4;
+  opacity: .5;
   border-radius: 50%;
 }
-.feat-blob.b0 { background: radial-gradient(circle at 35% 40%, rgba(37, 151, 208, .55), rgba(215, 230, 245, .75) 75%); }
-.feat-blob.b1 { background: radial-gradient(circle at 60% 35%, rgba(119, 155, 193, .6), rgba(203, 220, 236, .7) 78%); }
-.feat-blob.b2 { background: radial-gradient(circle at 50% 50%, rgba(154, 191, 218, .65), rgba(215, 230, 245, .5) 80%); }
+.feat-blob.b0 { background: radial-gradient(circle at 35% 40%, rgba(255, 148, 115, .75), rgba(160, 181, 235, .75) 75%); }
+.feat-blob.b1 { background: radial-gradient(circle at 60% 35%, rgba(167, 252, 205, .7), rgba(160, 181, 235, .65) 78%); }
+.feat-blob.b2 { background: radial-gradient(circle at 50% 50%, rgba(236, 218, 152, .7), rgba(255, 148, 115, .45) 80%); }
 html.dark .feat-blob { opacity: .3; }
 
 .feat-mock {
   position: relative;
   z-index: 1;
-  background: var(--color-paper);
+  background: var(--color-parchment);
   border: 1px solid var(--color-ash);
   border-radius: var(--radius-cards);
   padding: 22px 24px;
@@ -1057,7 +1022,7 @@ html.dark .feat-blob { opacity: .3; }
   flex-direction: column;
   justify-content: center;
   gap: 10px;
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-md);
 }
 
 /* ---- mock 通用小元素 ---- */
@@ -1067,11 +1032,11 @@ html.dark .feat-blob { opacity: .3; }
 .mk-dots i:nth-child(1) { background: var(--color-coral); }
 .mk-dots i:nth-child(2) { background: var(--color-gold); }
 .mk-dots i:nth-child(3) { background: var(--color-mint); }
-.mk-line { height: 8px; border-radius: 9999px; background: rgba(190, 190, 204, .55); }
+.mk-line { height: 8px; border-radius: 9999px; background: rgba(206, 202, 200, .55); }
 .mk-line.w40 { width: 40%; } .mk-line.w55 { width: 55%; } .mk-line.w60 { width: 60%; } .mk-line.w70 { width: 70%; }
 
 /* AI生成 mock：进度条循环 + 生成物浮现 */
-.mk-progress { height: 6px; border-radius: 9999px; background: rgba(190, 190, 204, .5); overflow: hidden; }
+.mk-progress { height: 6px; border-radius: 9999px; background: rgba(206, 202, 200, .5); overflow: hidden; }
 .mk-progress i { display: block; height: 100%; border-radius: 9999px; background: var(--color-lake-fill, var(--color-lake-blue)); animation: mkBar 6s infinite; }
 @keyframes mkBar {
   0% { width: 4%; } 38% { width: 100%; } 82% { width: 100%; } 100% { width: 4%; }
@@ -1101,7 +1066,7 @@ html.dark .feat-blob { opacity: .3; }
   background: var(--color-periwinkle-mist); color: var(--color-lake-blue);
   font-size: 10px; display: inline-flex; align-items: center; justify-content: center;
 }
-.mk-opt i { height: 7px; border-radius: 9999px; background: rgba(190, 190, 204, .55); }
+.mk-opt i { height: 7px; border-radius: 9999px; background: rgba(206, 202, 200, .55); }
 .mk-opt i.w40 { width: 40%; } .mk-opt i.w50 { width: 50%; } .mk-opt i.w55 { width: 55%; }
 @keyframes optPick {
   0%, 18% { border-color: var(--color-ash); background: var(--color-parchment); }
@@ -1152,7 +1117,7 @@ html.dark .feat-blob { opacity: .3; }
   animation-delay: calc(var(--i, 0) * .45s);
 }
 .mk-wrow i { font-style: normal; color: var(--functional-red); font-size: 11px; }
-.mk-wrow u { text-decoration: none; height: 7px; border-radius: 9999px; background: rgba(190, 190, 204, .55); flex: 1; }
+.mk-wrow u { text-decoration: none; height: 7px; border-radius: 9999px; background: rgba(206, 202, 200, .55); flex: 1; }
 .mk-wrow u.w40 { width: 40%; } .mk-wrow u.w48 { width: 48%; } .mk-wrow u.w55 { width: 55%; }
 .mk-wrow b { font-size: 10.5px; color: var(--color-smoke); font-weight: 400; white-space: nowrap; }
 .mk-redo {
