@@ -11,6 +11,8 @@ const App = {
       Quiz.abort();
     }
     $$('.tabs button').forEach(b => b.classList.toggle('active', b.dataset.view === name));
+    /* 离开首页时停掉今日背单词轮盘，防止定时器叠加 */
+    if (name !== 'home' && typeof hwReelStop === 'function') hwReelStop();
     /* 首页：全屏蓝 Hero 从页面顶端铺起，顶部公告条让位（黑色横条会割裂首屏） */
     document.body.classList.toggle('view-home', name === 'home');
     const r = this.views[name];

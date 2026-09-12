@@ -561,7 +561,6 @@ textarea { width: 100%; resize: vertical; line-height: 1.49; }
   font-family: var(--font-serif); font-weight: 400; letter-spacing: var(--ls-heading); line-height: 1.1;
 }
 .stat span { color: var(--color-smoke); font-size: 11px; text-transform: uppercase; letter-spacing: var(--ls-caps); }
-.stat.warnstat b { color: var(--functional-red); }
 .help summary { cursor: pointer; font-size: 20px; }
 .help ul { margin: 16px 0 0; padding-left: 20px; }
 .help li { margin-bottom: 8px; color: var(--color-graphite); font-size: 14px; }
@@ -1376,17 +1375,31 @@ html.dark .seg button.active { background: var(--color-periwinkle-mist); color: 
   text-align: left;
 }
 
-/* 卡片压边后的呼吸间距（Hero 下方到统计卡片之间） */
-.hero-tail { height: 64px; }
 .hw-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 14px; }
 .hw-goal { margin-bottom: 14px; }
 .hw-goal-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--color-smoke); margin-bottom: 6px; }
 .hw-goal-row b { font-size: 16px; color: var(--color-off-black); }
 .hw-words { position: relative; min-height: 118px; }
-.hw-words .mk-word { position: absolute; inset: auto 0 0 0; }
 
-/* 板块模拟卡里的翻词动画（Hero 与 背单词板块共用） */
-.m-word .mk-word, .hw-words .mk-word {
+/* 今日背单词：三词轮盘（上=已展示 半透明 / 中=展示中 清晰 / 下=待展示 半透明） */
+.hw-reel { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.hw-reel .mk-word {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-ash);
+  border-radius: var(--radius-inputs);
+  background: var(--color-paper-white);
+  opacity: .35;
+  transition: opacity .4s ease;
+}
+.hw-reel .mk-word.is-cur { opacity: 1; animation: reelIn .45s ease; }
+@keyframes reelIn {
+  from { opacity: .35; transform: translateY(5px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* 板块模拟卡里的翻词动画（背单词板块共用；首页轮盘已改为 JS 驱动不在此列） */
+.m-word .mk-word {
   display: flex; align-items: baseline; gap: 10px;
   padding: 10px 14px;
   border: 1px solid var(--color-ash);
@@ -1396,7 +1409,6 @@ html.dark .seg button.active { background: var(--color-periwinkle-mist); color: 
   animation: wordCycle 9s infinite;
   animation-delay: calc(var(--i, 0) * 3s);
 }
-.hw-words .mk-word { position: absolute; }
 .m-word .mk-word { position: absolute; left: 0; right: 0; }
 .m-word .mk-wstack, .hw-words { position: relative; }
 .mk-word b { font-family: var(--font-serif); font-size: 17px; letter-spacing: var(--ls-body); }
@@ -1594,7 +1606,6 @@ html.dark .feat-blob { opacity: .3; }
   .hero2-l h1 { font-size: clamp(34px, 8vw, 48px); }
   .hero2-l p { font-size: 15px; }
   .hero2-r { margin-top: 36px; max-width: 100%; }
-  .hero-tail { height: 40px; }
   /* 顶栏：三栏 grid 在窄屏撑不开（导航按钮不可压缩），改为可换行的纵向堆叠，
      并允许导航横向滚动，避免整页横向溢出 */
   .topbar { grid-template-columns: 1fr; row-gap: 10px; padding: 12px 16px; }
@@ -1609,10 +1620,11 @@ html.dark .feat-blob { opacity: .3; }
   .home-sects-head h2 { font-size: 28px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .m-word .mk-word, .hw-words .mk-word,
+  .m-word .mk-word,
   .mk-progress i, .mk-pills .vtag, .mk-opt, .mk-branches span,
   .mk-whead span, .mk-wrow, .mk-redo { animation: none; opacity: 1; transform: none; filter: none; }
-  .m-word .mk-word:nth-child(n+2), .hw-words .mk-word:nth-child(n+2) { opacity: 0; }
+  .m-word .mk-word:nth-child(n+2) { opacity: 0; }
+  .hw-reel .mk-word.is-cur { animation: none; } /* 轮盘仅取消入场动画，三槽透明度层级保留 */
 }
 .m-word .mk-wstack { min-height: 48px; }
 

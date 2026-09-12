@@ -81,16 +81,36 @@ function featSection(f, i) {
   </section>`;
 }
 
+/* ---------- 今日背单词：三词轮盘（上=已展示 / 中=展示中 / 下=待展示） ---------- */
+let reelTimer = null;
+function hwReelStop() {
+  if (reelTimer) { clearInterval(reelTimer); reelTimer = null; }
+}
+function hwReelStart(words) {
+  hwReelStop();
+  const box = $('#hw-reel');
+  if (!box || words.length < 3) return; /* 词数不足三张轮盘时静态展示，不轮换 */
+  let idx = 0;
+  const n = words.length;
+  const slot = (w, cls) => w ? `<div class="mk-word ${cls}"><b>${esc(w.word)}</b><span>${esc(w.meaning || '')}</span></div>` : '';
+  const paint = () => {
+    box.innerHTML =
+      slot(words[(idx - 1 + n) % n], 'is-prev') +
+      slot(words[idx], 'is-cur') +
+      slot(words[(idx + 1) % n], 'is-next');
+  };
+  paint();
+  reelTimer = setInterval(() => { idx = (idx + 1) % n; paint(); }, 3000);
+}
+
 function renderHome() {
   const banks = Store.banks();
-  const qCount = banks.reduce((s, b) => s + b.questions.length, 0);
   const outlines = Store.outlines();
-  const wrong = Store.wrongbook().length;
   const folderName = Store.data.activeFolder === '__all__' ? '全部课程' : Store.folderName(Store.data.activeFolder);
   const vocabCount = Object.keys(Store.data.vocab.words).length;
   const today = Store.getToday();
   const pct = Math.min(100, Math.round(today.done / today.goal * 100));
-  const demoWords = Object.values(Store.data.vocab.words).slice(0, 3);
+  const allWords = Object.values(Store.data.vocab.words);
 
   $('#main').innerHTML = `
     <section class="hero2">
@@ -110,22 +130,10 @@ function renderHome() {
             <div class="hw-goal-row"><span>今日目标</span><span><b>${today.done}</b> / ${today.goal} 词</span></div>
             <div class="pg-bar"><div class="pg-fill" style="width:${pct}%"></div></div>
           </div>
-          <div class="hw-words">${demoWords.length ? demoWords.map((w, i) => `
-            <div class="mk-word" style="--i:${i}"><b>${esc(w.word)}</b><span>${esc(w.meaning || '')}</span></div>`).join('')
-            : '<p class="muted">词库还是空的——去「数据管理」导入词库试试</p>'}</div>
+          <div class="hw-words hw-reel" id="hw-reel">${allWords.length ? '' : '<p class="muted">词库还是空的——去「数据管理」导入词库试试</p>'}</div>
         </div>
       </div>
     </section>
-
-    <div class="hero-tail"></div>
-
-    <div class="stat-grid">
-      <div class="card stat" id="s-vocab"><b>${vocabCount}</b><span>单词词库</span></div>
-      <div class="card stat" id="s-bank"><b>${banks.length}</b><span>题库</span></div>
-      <div class="card stat" id="s-q"><b>${qCount}</b><span>题目总数</span></div>
-      <div class="card stat" id="s-ol"><b>${outlines.length}</b><span>知识点大纲</span></div>
-      <div class="card stat${wrong ? ' warnstat' : ''}" id="s-wrong"><b>${wrong}</b><span>错题待重做</span></div>
-    </div>
 
     <div class="home-sects">
       <div class="home-sects-head">
@@ -146,12 +154,10 @@ function renderHome() {
     </details>`;
 
   $('#h-vocab').onclick = () => App.showView('vocab');
-  $('#s-vocab').onclick = () => App.showView('vocab');
   $('#h-data').onclick = () => App.showView('data');
-  $('#s-q').onclick = () => App.showView('setup');
-  $('#s-ol').onclick = () => App.showView('mindmap');
-  $('#s-bank').onclick = () => App.showView('data');
-  $('#s-wrong').onclick = () => App.showView('wrongbook');
+
+  /* 今日背单词轮盘：进入首页启动；词数不足三槽时静态展示 */
+  hwReelStart(allWords);
 
   /* 板块卡片：整卡可点（路由变量 data-route），回车触发 */
   $$('.feat').forEach(card => {
