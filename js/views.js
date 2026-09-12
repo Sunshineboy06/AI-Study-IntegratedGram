@@ -101,11 +101,6 @@ function renderHome() {
           <button class="btn primary lg" id="h-vocab">背单词</button>
           <button class="btn lg" id="h-data">导入数据</button>
         </div>
-        <div class="hero2-links">
-          <button class="feat-link" id="h-quiz">开始刷题 →</button>
-          <button class="feat-link" id="h-map">总复习脑图 →</button>
-          <button class="feat-link" id="h-data">导入 / 管理数据 →</button>
-        </div>
       </div>
       <div class="hero2-r">
         <div class="feat-blob b0"></div>
@@ -152,11 +147,9 @@ function renderHome() {
 
   $('#h-vocab').onclick = () => App.showView('vocab');
   $('#s-vocab').onclick = () => App.showView('vocab');
-  $('#h-quiz').onclick = () => App.showView('setup');
-  $('#s-q').onclick = () => App.showView('setup');
-  $('#h-map').onclick = () => App.showView('mindmap');
-  $('#s-ol').onclick = () => App.showView('mindmap');
   $('#h-data').onclick = () => App.showView('data');
+  $('#s-q').onclick = () => App.showView('setup');
+  $('#s-ol').onclick = () => App.showView('mindmap');
   $('#s-bank').onclick = () => App.showView('data');
   $('#s-wrong').onclick = () => App.showView('wrongbook');
 
