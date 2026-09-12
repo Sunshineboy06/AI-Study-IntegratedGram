@@ -95,7 +95,6 @@ function renderHome() {
   $('#main').innerHTML = `
     <section class="hero2">
       <div class="hero2-l">
-        <span class="pill-badge">本地优先 · 数据不出设备</span>
         <h1>学、练、背，<br>一个平台完成</h1>
         <p>当前课程「<b>${esc(folderName)}</b>」：题库 <b>${banks.length}</b> · 大纲 <b>${outlines.length}</b> · 单词 <b>${vocabCount}</b>。<br>所有数据保存在本机浏览器中，随时备份迁移。</p>
         <div class="hero2-actions glass-group">
