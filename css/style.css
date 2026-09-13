@@ -171,7 +171,7 @@
   --topbar-blur: blur(14px) saturate(1.35);   /* 顶栏毛玻璃（"一点"，不喧宾夺主） */
   --topbar-bg-compact: transparent;           /* 顶栏（滚动后：仍全透明玻璃） */
   --topbar-bg-home: transparent;              /* 兼容保留（语义已并入上面两个） */
-  --topbar-fg: #ffffff;                       /* 顶栏文字（未滚动：浮在蓝色上白字） */
+  --topbar-fg: var(--color-ink);              /* 顶栏文字（未滚动：浮在画布上深字；蓝色横幅已下移到顶栏之下） */
   --topbar-fg-compact: var(--color-ink);      /* 顶栏文字（滚动后：浮在画布上深字） */
   --surface-subtle: #fafafa;                  /* 次级容器：包裹一组卡片 */
   /* 导航占位高度 = 顶栏实高(≈78，含 18px 上下内边距) + 平台容器上边距(40) + 余量，
@@ -227,18 +227,37 @@ main, .topbar, #toast-box { position: relative; z-index: 1; }
 body.view-home .folderbar { display: none; }   /* 首页：左上角课程/数据入口让位品牌区 */
 .topbar { color: var(--topbar-fg); }
 .topbar .brand,
-.topbar .tabs button { color: rgba(255, 255, 255, .88); }
-.topbar .tabs button:hover { color: #ffffff; background: rgba(255, 255, 255, .16); }
-.topbar .tabs button.active { background: #ffffff; color: #0d0f12; }
-.topbar .brand-mark { border-color: rgba(255, 255, 255, .8); }
-.topbar .folder-label { color: rgba(255, 255, 255, .72); }
+.topbar .tabs button { color: var(--color-charcoal); }
+.topbar .tabs button:hover { color: var(--color-off-black); background: var(--color-cloud-gray); }
+.topbar .tabs button.active { background: var(--color-sky-tint); color: var(--color-ink); }   /* 未滚动与滚动后同款：淡蓝面深字 */
+.topbar .brand-mark { border-color: var(--color-ink); }
+.topbar .folder-label { color: var(--color-charcoal); }
 .topbar .folderbar select {
+  background: var(--card-solid); color: var(--color-ink); border-color: var(--color-ash);
+}
+.topbar .btn.ghost { color: var(--color-charcoal); border-color: var(--color-ash); }
+.topbar .btn.ghost:hover { color: var(--color-off-black); background: var(--color-cloud-gray); }
+/* 导航：浅色画布上用半透明白玻璃胶囊（与滚动后同款） */
+.topbar .tabs {
+  background: rgba(255, 255, 255, .5);
+  border-color: rgba(13, 15, 18, .08);
+  box-shadow: var(--shadow-subtle-2);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+/* 深色模式：未滚动浮在深色画布上，文字保持白色系玻璃（横幅下移后顶栏不再浮蓝） */
+html.dark .topbar { color: var(--topbar-fg); }
+html.dark .topbar .brand,
+html.dark .topbar .tabs button { color: rgba(255, 255, 255, .88); }
+html.dark .topbar .tabs button:hover { color: #ffffff; background: rgba(255, 255, 255, .16); }
+html.dark .topbar .tabs button.active { background: #ffffff; color: #0d0f12; }
+html.dark .topbar .brand-mark { border-color: rgba(255, 255, 255, .8); }
+html.dark .topbar .folder-label { color: rgba(255, 255, 255, .72); }
+html.dark .topbar .folderbar select {
   background: rgba(255, 255, 255, .16); color: #ffffff; border-color: rgba(255, 255, 255, .32);
 }
-.topbar .btn.ghost { color: rgba(255, 255, 255, .88); border-color: rgba(255, 255, 255, .32); }
-.topbar .btn.ghost:hover { color: #ffffff; background: rgba(255, 255, 255, .16); }
-/* 导航：蓝底上用玻璃胶囊（半透明白 + blur），避免实色块割裂蓝色 */
-.topbar .tabs {
+html.dark .topbar .btn.ghost { color: rgba(255, 255, 255, .88); border-color: rgba(255, 255, 255, .32); }
+html.dark .topbar .btn.ghost:hover { color: #ffffff; background: rgba(255, 255, 255, .16); }
+html.dark .topbar .tabs {
   background: rgba(255, 255, 255, .16);
   border-color: rgba(255, 255, 255, .28);
   box-shadow: none;
@@ -279,8 +298,8 @@ html.dark .topbar.is-compact .tabs {
 }
 
 /* ---------- 顶部公告条：全局让位 ----------
-   所有视图页头都是蓝色渐变横幅并从页面最顶端铺起，黑色公告条会横在蓝色
-   之上割裂首屏，故全局隐藏（其信息已由页头与顶栏承载）。 */
+   各视图页头已是蓝色渐变横幅（整块完整可见、四角圆角），黑色公告条会割裂首屏，
+   故全局隐藏（其信息已由页头与顶栏承载）。 */
 .announce { display: none; }
 .announce .a-spacer { flex: 1; }
 .announce .a-pill {
@@ -398,17 +417,17 @@ button { font-family: inherit; color: inherit; }
   margin-bottom: 24px;
 }
 main { max-width: 1200px; margin: 40px auto 96px; padding: 0 24px; }
-/* 功能页页头：与首页同款蓝色渐变横幅，从页面最顶端铺起（顶栏透明玻璃浮其上）。
-   负上边距盖过顶栏占位，负左右边距 breakout 到视口全宽（min() 夹住防窄屏反噬）。 */
+/* 功能页页头：与首页同款蓝色渐变横幅，整块完整可见——顶部从顶栏之下开始（main 的 40px 间距让位），
+   四角统一圆角，不再上提钻到顶栏后面。负左右边距 breakout 到视口全宽（min() 夹住防窄屏反噬）。 */
 .page-title {
   font-size: clamp(30px, 4vw, 44px);
   line-height: 1.2;
   text-align: center;
   color: #ffffff;
   background: var(--gradient-hero-full);
-  padding: calc(var(--nav-stack) + 44px) 24px 48px;
-  margin: calc(-1 * var(--nav-stack)) min(0px, calc(-50vw + 600px)) 28px;
-  border-radius: 0 0 var(--radius-3xl) var(--radius-3xl);   /* 底部两角圆角，与首页 Hero 一致 */
+  padding: 44px 24px 48px;
+  margin: 0 min(0px, calc(-50vw + 600px)) 28px;
+  border-radius: var(--radius-3xl);   /* 四角圆角，上部不再被顶栏遮挡 */
 }
 .page-sub { margin: -8px 0 24px; }
 
@@ -1274,8 +1293,8 @@ html.dark .seg button.active { background: var(--color-periwinkle-mist); color: 
    样图几何（2230×1263 截图 → 相对值）：
      · 标题两行居中，首行顶 ≈13.8%VH，末行底 ≈30.5%VH，最大行宽 630px/2230 ≈ 28% 视口
      · 黑 CTA 胶囊 245×68 在 44.6%VH 处，水平精确居中
-     · 蓝色铺满整屏（含顶栏之下），白色卡片落在蓝色末端
-   实现：负 margin 横跨视口并上提盖过公告条+顶栏，蓝色从页面顶端开始铺满首屏。 */
+     · 蓝色横幅整块完整可见：顶部从顶栏之下开始，四角圆角，不再上提盖住导航区。
+   实现：负 margin 横跨视口（min() 夹住防窄屏反噬），顶部留出顶栏占位（main 的 40px 间距）。 */
 .hero2 {
   display: flex;
   flex-direction: column;
@@ -1284,14 +1303,14 @@ html.dark .seg button.active { background: var(--color-periwinkle-mist); color: 
   text-align: center;
   background: var(--gradient-hero-full);
   border: none;
-  border-radius: 0 0 var(--radius-3xl) var(--radius-3xl);   /* 底部两角圆角，蓝色收尾不再生硬 */
-  /* 上内边距 = 公告条+顶栏高度 + 视觉留白，让内容不被浮在上面的导航压住 */
-  padding: calc(var(--nav-stack) + 72px) max(24px, calc(50vw - 560px)) 88px;
+  border-radius: var(--radius-3xl);   /* 四角圆角，上部边界与下部一致 */
+  /* 上内边距 = 视觉留白，内容垂直居中由 flex 保证 */
+  padding: 72px max(24px, calc(50vw - 560px)) 88px;
   /* Breakout：平台容器 max-width 1200 + 两侧 24 padding，故 -600 可横跨视口。
      用 min(0px, …) 夹住：视口窄于 1200 时该值为正，会把整块 Hero 推出屏幕右侧
-     （曾导致移动端横向溢出、画面只剩一条边缘）。负上边距把 Hero 提到公告条之上。 */
-  margin: calc(-1 * var(--nav-stack)) min(0px, calc(-50vw + 600px)) 0;
-  min-height: 100vh;                /* 首屏铺满（含被盖住的导航区） */
+     （曾导致移动端横向溢出、画面只剩一条边缘）。 */
+  margin: 0 min(0px, calc(-50vw + 600px)) 0;
+  min-height: calc(100vh - var(--nav-stack));   /* 首屏铺满：顶栏之下到视口底 */
   position: relative;
   overflow: hidden;
 }
@@ -1600,9 +1619,9 @@ html.dark .feat-blob { opacity: .3; }
   /* 窄屏顶栏纵向堆叠后更高，重算导航占位高度（公告条已全局让位） */
   :root { --nav-stack: 116px; }
   /* 功能页页头横幅：窄屏收紧内边距与字号 */
-  .page-title { padding: calc(var(--nav-stack) + 28px) 20px 36px; font-size: clamp(26px, 7vw, 34px); }
+  .page-title { padding: 28px 20px 36px; font-size: clamp(26px, 7vw, 34px); }
   /* 首屏 Hero：单列居中已由基础样式保证，此处仅收紧内边距与字号 */
-  .hero2 { padding: calc(var(--nav-stack) + 40px) 24px 56px; min-height: auto; }
+  .hero2 { padding: 40px 24px 56px; min-height: auto; }
   .hero2-l h1 { font-size: clamp(34px, 8vw, 48px); }
   .hero2-l p { font-size: 15px; }
   .hero2-r { margin-top: 36px; max-width: 100%; }
