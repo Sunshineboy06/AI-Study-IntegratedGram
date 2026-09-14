@@ -1,79 +1,70 @@
-# AI学习一体化平台 · 公网部署版
+# 我的学习平台（仓库入口）
 
-一个开箱即用的学习平台：**刷题、背单词、总复习脑图、错题本**四大功能闭环，数据全部保存在访客自己的浏览器里。服务器只做静态托管与文档解析，**不做任何 AI 计算**——访客用内置提示词在自己的第三方 AI（Kimi / ChatGPT / 豆包等）里生成学习内容，回来上传导入即可。
+这个仓库现在放着**两个独立的学习平台**，根目录 `index.html` 是选择门户，打开后点卡片进入：
 
-> 纯原生 JavaScript 单页应用，零构建工具、零前端框架；服务端仅 Flask + 文档解析，2核2G 即可部署。
+| 平台 | 路径 | 说明 |
+|---|---|---|
+| 🧠 AI 学习一体化平台 | [`ai-study/`](ai-study/) | 刷题、背单词、总复习脑图、错题本。Flask 静态托管 + 文档解析，可部署到服务器。详见 [ai-study/README.md](ai-study/README.md) |
+| ⚛️ 大学物理知识点自测 | [`physics/`](physics/) | 按课件 YYF 19–45 梳理的 26 讲、219 个知识点、486 道检测题，单文件离线可用，支持多终端同步 |
 
-## 功能一览
+两个平台数据彼此独立，互不干扰。
 
-| 板块 | 说明 |
-|---|---|
-| ✏️ 刷题练习 | 单选 / 多选 / 填空 / 简答自由组卷，章节筛选、随机顺序、限时倒计时 |
-| 🔤 背单词 | 艾宾浩斯曲线安排复习，陌生/学习中/完全背诵三色标签，首页三词轮盘速览，支持 Azure 神经语音朗读 |
-| 🧠 总复习脑图 | Markdown 大纲一键生成交互式思维导图，知识点可直接关联题目即点即练 |
-| 📓 错题本 | 答错自动归集，按题库溯源、错误次数累计，一键重做 |
-| 🗂️ 数据管理 | 课程文件夹分组；题库/大纲/词库导入导出，一键备份迁移 |
+---
 
-**设计特点**：全站蓝色页头 + 常驻透明玻璃顶栏、深浅色主题、移动端动画降级优化（窄屏/触屏设备自动砍掉高开销模糊效果）。
+## 一、开启 GitHub Pages（只需做一次）
 
-## 访客三步上手
+推送后网页不会自动上线，需要在 GitHub 开启 Pages：
 
-1. **复制提示词**：「数据管理」→「🧠 第三方 AI 生成文件提示词」，复制题库 / 大纲 / 单词表三份提示词之一
-2. **第三方 AI 生成**：粘贴到任意 AI，把末尾「素材」换成自己的笔记内容
-3. **上传导入**：回到「数据管理」上传生成的 `.json` / `.md` / `.txt` 文件，自动校验导入
+1. 打开仓库页面 → **Settings** → 左侧 **Pages**
+2. **Source** 选 `Deploy from a branch`
+3. **Branch** 选 `main`，目录选 `/ (root)` → **Save**
+4. 等 1–2 分钟，访问 `https://Sunshineboy06.github.io/AI-Study-IntegratedGram/`
 
-> 防重复：词库已有单词自动跳过并保留学习进度；题库重复导入请先删除旧题库。
+首页就是平台选择页，两个卡片分别进入对应平台。
 
-详见 [使用说明-公网版.md](使用说明-公网版.md)，配套提示词在 [提示词/](提示词/) 目录。
+## 二、本地使用
 
-## 本地运行
+**大学物理知识点自测**：直接双击 `physics/index.html`，或用浏览器打开即可，无需任何环境。
 
+**AI 学习一体化平台**：
 ```bash
+cd ai-study
 pip install -r requirements.txt
-python server.py            # 默认 http://127.0.0.1:8796
-# 自定义端口/地址：PLATFORM_HOST=0.0.0.0 PLATFORM_PORT=9000 python server.py
+python server.py          # 默认 http://127.0.0.1:8796
 ```
 
-浏览器打开即用，无需任何构建步骤。`server.py` 只提供两件事：
+## 三、物理自测的多终端同步
 
-- 静态托管整个目录（SPA 本体）
-- `POST /api/extract-text`：PDF / DOCX / TXT / MD 文档文本提取（供导入功能解析）
+答题进度默认存在各自浏览器里。要跨设备同步：
 
-## 服务器部署（Alibaba Cloud Linux 3）
+1. 在物理自测页点右上角 **☁ 云同步**
+2. 填一个 GitHub 个人访问令牌（[创建地址](https://github.com/settings/personal-access-tokens)，只需给 **Gists: Read and write** 权限）
+3. 填一个自定义的**同步码**（如 `physics-2026`），**每台设备填一样的**
+4. 点「双向同步」
 
-一条命令完成部署，详见 [deploy-linux/README-部署.md](deploy-linux/README-部署.md)：
+- 数据存进你的**私密 Gist**（`public: false`，只有持令牌的人能读），令牌只留在本机浏览器
+- 同一道题两台设备都答过时，以**较新的一次作答**为准
+- 也可以「以本地覆盖云端」或「以云端覆盖本地」做单向强制同步
+- 更换设备只需重复：填同一令牌 + 同一同步码 → 双向同步
 
-```bash
-# 方式 A：无域名，IP 直连（推荐个人使用）
-PLATFORM_HOST=0.0.0.0 SKIP_NGINX=1 PORT=8796 bash deploy-linux/deploy.sh
-# 浏览器打开 http://公网IP:8796/
-
-# 方式 B：有已备案域名，走 80 端口 + nginx 反代
-bash deploy-linux/deploy.sh
-```
-
-自动完成：安装 python3/nginx → venv 装依赖 → systemd 常驻 → nginx 反代。常用运维：`systemctl status/restart ai-platform`、`journalctl -u ai-platform -f`。
-
-## 技术栈
-
-- **前端**：原生 HTML / CSS / JavaScript（无框架、无构建工具、无外部依赖），深浅色主题用 CSS 令牌 + 深色反转实现
-- **后端**：Flask（`flask>=3.0`）静态托管 + 文档解析接口（`python-docx`、`pypdf`）
-- **持久化**：访客数据全部存浏览器 localStorage，服务器不保存任何用户数据
-- **语音**：浏览器 SpeechSynthesis 免费朗读；可选配置 Azure 神经语音
-
-## 目录结构
+## 四、目录结构
 
 ```
-├── index.html              # SPA 入口
-├── css/style.css           # 全部样式（设计令牌 + 深浅色主题 + 响应式）
-├── js/                     # 模块化原生 JS（views/quiz/vocab/mindmap/storage/importer…）
-├── server.py               # Flask 静态托管 + /api/extract-text
-├── parsers.py              # PDF/DOCX/TXT/MD 解析
-├── prompts/                # 第三方 AI 生成题库/大纲/单词表的提示词
-├── deploy-linux/           # 一键部署脚本 + systemd/nginx 配置
-└── 使用说明-公网版.md       # 访客使用指引
+├── index.html            # 平台选择门户（两个入口）
+├── physics/
+│   └── index.html        # 大学物理知识点自测（单文件，含知识点/题库/同步）
+└── ai-study/             # AI 学习一体化平台（原根目录内容整体迁入，未删改）
+    ├── index.html        # 平台 SPA 入口
+    ├── css/ js/          # 样式与模块
+    ├── server.py         # Flask 静态托管 + /api/extract-text
+    ├── parsers.py        # PDF/DOCX/TXT/MD 解析
+    ├── 提示词/            # 第三方 AI 生成题库/大纲/单词表的提示词
+    ├── deploy-linux/     # 一键部署脚本 + systemd/nginx 配置
+    └── README.md         # 平台完整说明
 ```
 
-## 隐私
+> `server.py` 与 `deploy-linux/deploy.sh` 都是基于**自身所在目录**解析路径，因此迁入 `ai-study/` 后无需改动即可正常运行；服务器部署请传 `ai-study/` 这个子目录（见 [ai-study/deploy-linux/README-部署.md](ai-study/deploy-linux/README-部署.md)）。
 
-所有学习数据（词库、刷题记录、错题）只存在**访客各自设备的浏览器**中，不跨设备同步、服务器不留存；清空浏览器数据即彻底删除。
+## 五、隐私
+
+两个平台的学习数据默认只存在各自设备的浏览器中；物理自测选择云同步后，进度会写入你本人的私密 GitHub Gist。服务器不保存任何用户数据。

@@ -1,9 +1,11 @@
 # 公网部署版 · 部署说明（Alibaba Cloud Linux 3）
 
 ## 0. 上传代码
-把整个「AI学习一体化平台-公网部署版」文件夹上传到服务器，例如 `/opt/ai-platform`：
+> 平台已迁入仓库的 `ai-study/` 子目录（仓库根目录现在是平台选择门户）。上传时只需传这个子目录：
+
+把 `ai-study` 整个文件夹传上去，例如 `/opt/ai-platform`：
 ```bash
-scp -r AI学习一体化平台-公网部署版/* root@<服务器IP>:/opt/ai-platform/
+scp -r ai-study/* root@<服务器IP>:/opt/ai-platform/
 ```
 
 ## 1. 部署方式选择

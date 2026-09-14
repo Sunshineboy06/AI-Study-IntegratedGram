@@ -1,7 +1,5 @@
-# WorkBuddy 会话工作数据（记忆、日志等），不属于平台代码
 .workbuddy/
-
-# Python 运行产物
 __pycache__/
 *.pyc
-venv/
+.DS_Store
+Thumbs.db

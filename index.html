@@ -3,61 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI学习一体化平台</title>
-<link rel="stylesheet" href="css/style.css">
-<script>
-/* 主题防闪烁：渲染前根据本地偏好挂上 dark 类 */
-try {
-  if (localStorage.getItem('platform.theme') === 'dark') document.documentElement.classList.add('dark');
-} catch (e) { /* 隐私模式等忽略 */ }
-</script>
+<title>我的学习平台 · 入口</title>
+<style>
+:root{
+  --bg:#f4f6fa; --card:#fff; --line:#e3e8ef;
+  --tx:#1f2937; --tx2:#5b6472; --tx3:#8b94a3;
+  --pri:#2563eb; --pri-bg:#eef4ff; --pri-line:#c7dbff;
+  --ok:#15803d; --ok-bg:#eafaf0; --ok-line:#b7e6c8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+  background:var(--bg);color:var(--tx);line-height:1.7;min-height:100vh;
+  display:flex;flex-direction:column;
+}
+header{padding:46px 24px 12px;text-align:center}
+header .kicker{font-size:12.5px;letter-spacing:2px;color:var(--pri);font-weight:600}
+header h1{font-size:29px;font-weight:700;margin:8px 0 8px;letter-spacing:-.3px}
+header p{color:var(--tx2);font-size:14.5px;max-width:560px;margin:0 auto}
+main{
+  flex:1;max-width:920px;width:100%;margin:0 auto;padding:30px 20px 60px;
+  display:grid;grid-template-columns:1fr 1fr;gap:20px;align-content:start;
+}
+@media(max-width:760px){ main{grid-template-columns:1fr} header h1{font-size:24px} }
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 24px 22px;
+  text-decoration:none;color:inherit;display:flex;flex-direction:column;
+  box-shadow:0 1px 2px rgba(16,24,40,.05),0 6px 20px rgba(16,24,40,.05);
+  transition:transform .16s,box-shadow .16s,border-color .16s;
+}
+.card:hover{transform:translateY(-3px);box-shadow:0 4px 10px rgba(16,24,40,.07),0 14px 34px rgba(16,24,40,.09);border-color:var(--pri-line)}
+.card .ico{
+  width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:23px;margin-bottom:14px;background:var(--pri-bg);border:1px solid var(--pri-line);
+}
+.card h2{font-size:19px;font-weight:700;margin-bottom:6px}
+.card .lead{font-size:13.5px;color:var(--tx2);margin-bottom:14px;flex:1}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.tags span{
+  font-size:12px;color:var(--tx2);background:#f6f8fb;border:1px solid var(--line);
+  padding:2px 9px;border-radius:20px;
+}
+.go{
+  display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--pri);
+}
+.go::after{content:"→";transition:transform .16s}
+.card:hover .go::after{transform:translateX(4px)}
+.meta{
+  margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);
+  display:flex;justify-content:space-between;font-size:12.5px;color:var(--tx3);
+}
+footer{padding:0 24px 34px;text-align:center;color:var(--tx3);font-size:12.5px}
+footer code{background:#eef1f6;padding:1px 6px;border-radius:4px;font-size:12px}
+</style>
 </head>
 <body>
-<div class="wash wash-a"></div>
-<div class="wash wash-b"></div>
-<div class="announce">
-  <span>AI STUDY PLATFORM</span>
-  <span class="a-spacer"></span>
-  <span>NOTES → MINDMAP · QUIZ · VOCABULARY</span>
-  <span class="a-pill">127.0.0.1:8796</span>
-</div>
-<header class="topbar" id="topbar">
-  <div class="tb-left">
-    <a class="brand" href="#" data-view="home"><span class="brand-mark" aria-hidden="true"></span>AI学习一体化平台</a>
-    <div class="folderbar" id="folderbar">
-      <span class="folder-label" aria-hidden="true"></span>
-      <select id="folder-select" title="选择课程文件夹，之后刷题/复习/错题本都只使用该文件夹内的数据"></select>
-      <button class="btn ghost sm" id="folder-manage" title="管理课程文件夹">管理</button>
-    </div>
-  </div>
-  <nav class="tabs" id="main-tabs">
-    <button data-view="home" class="active">首页</button>
-    <button data-view="vocab">背单词</button>
-    <button data-view="setup">刷题</button>
-    <button data-view="mindmap">总复习</button>
-    <button data-view="wrongbook">错题本</button>
-    <button data-view="data">数据管理</button>
-  </nav>
-  <div class="tb-right">
-    <button class="btn ghost sm" id="theme-toggle" title="切换深浅色主题">◐ 夜间</button>
-  </div>
+<header>
+  <div class="kicker">STUDY PORTAL</div>
+  <h1>我的学习平台</h1>
+  <p>两个平台，各管一段学习场景。选一个进入，随时可以从浏览器返回这里重新选择。</p>
 </header>
 
-<main id="main"></main>
+<main>
+  <a class="card" href="./ai-study/">
+    <div class="ico">🧠</div>
+    <h2>AI 学习一体化平台</h2>
+    <div class="lead">刷题、背单词、总复习脑图、错题本的完整闭环。用内置提示词在第三方 AI 里生成学习内容，回来上传导入即可。</div>
+    <div class="tags"><span>刷题组卷</span><span>艾宾浩斯背单词</span><span>思维导图</span><span>错题本</span></div>
+    <div class="go">进入平台</div>
+    <div class="meta"><span>原生 JS · 无构建</span><span>数据存本机浏览器</span></div>
+  </a>
 
-<div id="toast-box"></div>
-<dialog id="dlg"></dialog>
+  <a class="card" href="./physics/">
+    <div class="ico">⚛️</div>
+    <h2>大学物理知识点自测</h2>
+    <div class="lead">按课件 YYF 19–45 梳理的 26 讲核心知识点，每个知识点配讲解、公式与检测题，支持判分、解析、错题本与多终端同步。</div>
+    <div class="tags"><span>219 个知识点</span><span>486 道检测题</span><span>即时判分</span><span>☁ 多端同步</span></div>
+    <div class="go">进入自测</div>
+    <div class="meta"><span>单文件 · 离线可用</span><span>进度可跨设备同步</span></div>
+  </a>
+</main>
 
-<script src="js/util.js"></script>
-<script src="js/sample-data.js"></script>
-<script src="js/prompts.js"></script>
-<script src="js/keyword.js"></script>
-<script src="js/importer.js"></script>
-<script src="js/storage.js"></script>
-<script src="js/vocab.js"></script>
-<script src="js/quiz.js"></script>
-<script src="js/mindmap.js"></script>
-<script src="js/views.js"></script>
-<script src="js/app.js"></script>
+<footer>
+  两个平台的数据彼此独立，都保存在本机浏览器；物理自测支持通过 GitHub Gist 在多台设备间同步进度。
+</footer>
 </body>
 </html>
