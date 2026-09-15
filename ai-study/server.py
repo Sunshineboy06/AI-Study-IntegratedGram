@@ -7,6 +7,13 @@
 环境变量：
   PLATFORM_HOST  监听地址（默认 127.0.0.1，配 nginx 反代用；直连可设 0.0.0.0）
   PLATFORM_PORT  监听端口（默认 8796）
+
+部署形态自适应：
+  - 本文件位于仓库内（上级目录有门户 index.html 和 physics/index.html）时，
+    托管整个仓库根：/ 为平台选择门户，/ai-study/ 为 AI 平台，/physics/ 为物理自测，
+    与 GitHub Pages 行为一致；
+  - 本文件被单独拷出部署（上级没有门户页）时，保持旧行为：只托管自身目录，
+    / 直接就是 AI 学习一体化平台。
 """
 import os
 
@@ -16,6 +23,22 @@ from werkzeug.serving import WSGIRequestHandler
 import parsers
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(BASE_DIR)
+
+
+def _pick_serve_dir():
+    """仓库根存在「平台选择门户 + 物理自测页」时托管仓库根，否则只托管 ai-study 自身。"""
+    try:
+        if (os.path.isfile(os.path.join(ROOT_DIR, "index.html"))
+                and os.path.isfile(os.path.join(ROOT_DIR, "physics", "index.html"))):
+            return ROOT_DIR
+    except OSError:
+        pass
+    return BASE_DIR
+
+
+SERVE_DIR = _pick_serve_dir()
+
 HOST = os.environ.get("PLATFORM_HOST", "127.0.0.1")
 PORT = int(os.environ.get("PLATFORM_PORT", "8796"))
 MAX_UPLOAD = 100 * 1024 * 1024
@@ -36,17 +59,22 @@ app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
 @app.get("/")
 def index():
-    return send_from_directory(BASE_DIR, "index.html")
+    return send_from_directory(SERVE_DIR, "index.html")
 
 
 @app.get("/<path:filename>")
 def static_files(filename):
-    """白名单式静态托管：.py/.sh/.git/.workbuddy 等一律按 404 处理（不泄露存在性）。"""
+    """白名单式静态托管：.py/.sh/.git/.workbuddy 等一律按 404 处理（不泄露存在性）。
+
+    目录请求（/ai-study、/physics/ 等）自动落到该目录下的 index.html。
+    """
+    if os.path.isdir(os.path.join(SERVE_DIR, filename)):
+        filename = filename.rstrip("/\\") + "/index.html"
     ext = os.path.splitext(filename)[1].lower()
     if ext not in STATIC_ALLOWED_EXT or os.path.basename(filename) in STATIC_DENIED_NAMES:
         from werkzeug.exceptions import NotFound
         raise NotFound()
-    return send_from_directory(BASE_DIR, filename)
+    return send_from_directory(SERVE_DIR, filename)
 
 
 @app.get("/api/config")
