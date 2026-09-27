@@ -8,17 +8,24 @@
    边框：1px #bebecc 发丝线；按钮 100px 药丸、卡片 18px 圆角
    ========================================================= */
 :root {
-  color-scheme: light;   /* 原生控件（文件选择器 / 滚动条 / 下拉列表）跟随浅色 */
-  /* Colors — Letters 规范调色板（严格取自 DESIGN.md Tokens） */
+  color-scheme: light;   /* 原生控件跟随浅色 */
+
+  /* Steep 字体规范定义 */
+  --font-serif: 'Signifier', 'Source Serif 4', 'Noto Serif SC', Georgia, ui-serif, serif;
+  --font-sans: 'Sohne', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", sans-serif;
+
+  /* Colors — Steep / Letters 规范调色板 */
   --color-paper-white: #ffffff;               /* Paper White 画布 */
   --color-obsidian: #070709;                  /* Obsidian 主文字 / 实心 CTA */
   --color-ink: #151515;                       /* Ink 标题 / 强分隔线 */
   --color-charcoal: #60606c;                  /* Charcoal 正文 / 次要文字 */
   --color-slate: #8b8b8b;                     /* Slate 三级文字 / 占位 / 停用态 */
-  --color-cloud-gray: #f5f5f5;                /* Cloud Gray 次级面 */
+  --color-cloud-gray: #f2f2f3;                /* Mist Gray 次级面 */
   --color-sky-tint: #d7e6f5;                  /* Sky Tint 淡蓝面 */
-  --color-surgical-blue: #2597d0;             /* Surgical Blue：唯一彩色，仅微图形 */
-  --color-lake-blue: #146a94;                 /* 文字级蓝（浅色）：#2597d0 在 Sky Tint 底仅 2.7:1，加深到 AA */
+  --color-blush-peach: #fbe1d1;               /* Blush Peach 暖桃高光面 */
+  --color-sienna-brown: #5d2a1a;              /* Sienna Brown 暖深棕 */
+  --color-surgical-blue: #2597d0;             /* Surgical Blue：唯一彩色微图形 */
+  --color-lake-blue: #146a94;                 /* 文字级蓝（浅色） */
   --gradient-sky: linear-gradient(180deg, #779bc1 0%, #9abfda 58%, #cbdcec 100%);
   /* 首屏全屏蓝（取自 Letters 首页样图实测，非上面的卡片天空渐变）：
      x=8 采样 0%#769bbf → 30%#87acce → 50%#91b7d4 → 70%#9fc3db → 90%#b3d1e3
@@ -127,14 +134,14 @@
   /* Radius（取自 tokens.json → radius 组）
      lg 10px / 2xl 18px / 3xl 24px / 3xl-2 32px
      另按功能语义派生：按钮·标签 100px（= full-3）、输入 12px、图标 8px */
-  --radius-lg: 10px;
-  --radius-cards: 18px;      /* = radius.2xl */
+  --radius-lg: 12px;
+  --radius-cards: 24px;      /* Steep 规范：cards 24px */
   --radius-3xl: 24px;
-  --radius-buttons: 100px;   /* = radius.full-3 */
-  --radius-pills: 100px;     /* = radius.full-3 */
-  --radius-inputs: 12px;
+  --radius-buttons: 9999px;  /* Steep 规范：buttons 9999px */
+  --radius-pills: 9999px;    /* Steep 规范：pills 9999px */
+  --radius-inputs: 16px;     /* Steep 规范：inputs 16px */
   --radius-icons: 8px;
-  --radius-2xl: 12px;
+  --radius-2xl: 16px;
   --radius-hero: 32px;
 
   /* Shadow（全部取自 tokens.json → shadow 组，不自造） */
@@ -221,6 +228,10 @@ h1, h2, h3, h4 {
   background: radial-gradient(circle at 60% 40%, rgba(154, 191, 218, .6), rgba(203, 220, 236, .55) 75%);
 }
 main, .topbar, #toast-box { position: relative; z-index: 1; }
+main {
+  padding-bottom: calc(48px + env(safe-area-inset-bottom));
+  touch-action: manipulation;
+}
 
 /* 顶栏配色：所有视图页头都是蓝色渐变横幅，未滚动时顶栏一律白字 + 玻璃胶囊；
    滚动离开页头后只切换文字与胶囊配色（浅色画布上深字），底色保持全透明。 */
@@ -420,8 +431,11 @@ main { max-width: 1200px; margin: 40px auto 96px; padding: 0 24px; }
 /* 功能页页头：与首页同款蓝色渐变横幅，整块完整可见——顶部从顶栏之下开始（main 的 40px 间距让位），
    四角统一圆角，不再上提钻到顶栏后面。负左右边距 breakout 到视口全宽（min() 夹住防窄屏反噬）。 */
 .page-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
   font-size: clamp(30px, 4vw, 44px);
-  line-height: 1.2;
+  line-height: 1.25;
+  letter-spacing: -0.66px;
   text-align: center;
   color: #ffffff;
   background: var(--gradient-hero-full);

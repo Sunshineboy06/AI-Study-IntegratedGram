@@ -515,7 +515,7 @@ const Vocab = {
         <button class="btn ghost sm" id="v-exit">退出背诵</button>
       </div>
 
-      <div class="card vcard">
+      <div class="card vcard" id="v-main-card">
         <div class="row" style="justify-content:flex-end;margin-top:0">
           <button class="btn ghost sm" id="v-showmode">${this.showMode === 'en' ? '🔤 当前：显示英文 → 点击切中文' : '🀄 当前：显示中文 → 点击切英文'}</button>
           <button class="btn ghost sm" id="v-speak" title="播放单词读音（可重复点击反复听）">🔊 播放读音</button>
@@ -598,6 +598,47 @@ const Vocab = {
     if (skip) skip.onclick = () => this.nextWord();
     const next = $('#v-next');
     if (next) { next.onclick = () => this.nextWord(); next.focus({ preventScroll: true }); }
+    
+    // 移动端卡片触屏手势交互（轻滑切词 / 快速自评）
+    const cardEl = $('#v-main-card');
+    if (cardEl) {
+      let tX = 0, tY = 0, moved = false;
+      cardEl.addEventListener('touchstart', e => {
+        tX = e.touches[0].clientX;
+        tY = e.touches[0].clientY;
+        moved = false;
+        cardEl.style.transition = 'none';
+      }, { passive: true });
+
+      cardEl.addEventListener('touchmove', e => {
+        const dx = e.touches[0].clientX - tX;
+        const dy = e.touches[0].clientY - tY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) {
+          moved = true;
+          // 移动端跟手微倾斜与位移动效
+          cardEl.style.transform = `translateX(${dx * 0.4}px) rotate(${dx * 0.03}deg)`;
+        }
+      }, { passive: true });
+
+      cardEl.addEventListener('touchend', e => {
+        cardEl.style.transition = 'transform 0.2s ease';
+        cardEl.style.transform = 'none';
+        if (!moved) return;
+        const dx = e.changedTouches[0].clientX - tX;
+        const dy = e.changedTouches[0].clientY - tY;
+        if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+          if (dx > 0) {
+            // 右滑：未作答时标记认识；已作答时切到下一个
+            if (!done) this.answer('known');
+            else this.nextWord();
+          } else {
+            // 左滑：标记不认识
+            if (!done) this.answer('unknown');
+          }
+        }
+      }, { passive: true });
+    }
+
     this.bindKeys();
     /* 作答后停在本词看释义，不再重复朗读 */
     if (Store.data.vocab.settings.autoSpeak && !done) this.speak(w.word);
