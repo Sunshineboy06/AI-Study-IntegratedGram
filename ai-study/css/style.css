@@ -15,25 +15,28 @@
   --font-sans: 'Sohne', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", sans-serif;
 
   /* Colors — Steep / Letters 规范调色板 */
-  --color-paper-white: #ffffff;               /* Paper White 画布 */
-  --color-obsidian: #070709;                  /* Obsidian 主文字 / 实心 CTA */
-  --color-ink: #151515;                       /* Ink 标题 / 强分隔线 */
-  --color-charcoal: #60606c;                  /* Charcoal 正文 / 次要文字 */
-  --color-slate: #8b8b8b;                     /* Slate 三级文字 / 占位 / 停用态 */
-  --color-cloud-gray: #f2f2f3;                /* Mist Gray 次级面 */
-  --color-sky-tint: #d7e6f5;                  /* Sky Tint 淡蓝面 */
+  /* Colors — Steep 讲义暖纸护眼调色板 */
+  --color-paper-white: #ffffff;               /* 纯白 */
+  --color-paper-warm: #fdfcf7;                /* 讲义米白（卡片面） */
+  --color-paper-sheet: #f4f1ea;               /* 讲义暖纸灰底板（低眩光护眼） */
+  --color-obsidian: #17191c;                  /* Obsidian 主文字 / 实心 CTA */
+  --color-ink: #17191c;                       /* Ink 标题 / 强分隔线 */
+  --color-charcoal: #5a5d66;                  /* Charcoal 正文 / 次要文字 */
+  --color-slate: #888c96;                     /* Slate 三级文字 / 占位 / 停用态 */
+  --color-cloud-gray: #fdfcf7;                /* 讲义米白面 */
+  --color-sky-tint: #dce7f2;                  /* Sky Tint 淡蓝面 */
   --color-blush-peach: #fbe1d1;               /* Blush Peach 暖桃高光面 */
   --color-sienna-brown: #5d2a1a;              /* Sienna Brown 暖深棕 */
   --color-surgical-blue: #2597d0;             /* Surgical Blue：唯一彩色微图形 */
   --color-lake-blue: #146a94;                 /* 文字级蓝（浅色） */
   --color-border-hairline: rgba(23, 25, 28, 0.08);
 
-  /* Steep 刊物级纸面渐变（浅色：雾灰微渐变；彻底告别刺眼大蓝横幅） */
-  --gradient-sky: linear-gradient(180deg, #f2f2f3 0%, #ebebef 100%);
-  --gradient-hero-full: linear-gradient(180deg, #fafafb 0%, #f2f2f3 100%);
+  /* Steep 刊物级讲义暖纸渐变（温暖柔和，彻底消除纯白晃眼） */
+  --gradient-sky: linear-gradient(180deg, #ede8df 0%, #f4f1ea 100%);
+  --gradient-hero-full: linear-gradient(180deg, #ece6da 0%, #f4f1ea 100%);
 
-  /* 旧令牌名 → 新调色板（全站组件引用，只在此处映射，一次换肤） */
-  --color-parchment: var(--color-paper-white);
+  /* 旧令牌名 → 新调色板（底板采用护眼暖纸灰，卡片浮在上方） */
+  --color-parchment: var(--color-paper-sheet);
   --color-off-black: var(--color-obsidian);
   --color-graphite: var(--color-charcoal);
 
@@ -173,9 +176,9 @@
   /* 顶栏：所有视图常驻全透明 + 一点毛玻璃。
      未滚动时浮在各页蓝色页头上（白字），滚动后浮在画布上（深字），仅靠
      backdrop-filter 呈现玻璃质感，不再回落为实色底。 */
-  --topbar-bg: transparent;                   /* 顶栏（常驻：全透明） */
-  --topbar-blur: blur(14px) saturate(1.35);   /* 顶栏毛玻璃（"一点"，不喧宾夺主） */
-  --topbar-bg-compact: transparent;           /* 顶栏（滚动后：仍全透明玻璃） */
+  --topbar-bg: rgba(244, 241, 234, 0.82);                   /* 顶栏（讲义暖纸微透毛玻璃） */
+  --topbar-blur: blur(16px) saturate(1.2);                  /* 顶栏毛玻璃 */
+  --topbar-bg-compact: rgba(244, 241, 234, 0.92);           /* 顶栏（滚动后微增不透明度） */
   --topbar-bg-home: transparent;              /* 兼容保留（语义已并入上面两个） */
   --topbar-fg: var(--color-ink);              /* 顶栏文字（未滚动：浮在画布上深字；蓝色横幅已下移到顶栏之下） */
   --topbar-fg-compact: var(--color-ink);      /* 顶栏文字（滚动后：浮在画布上深字） */
@@ -333,7 +336,7 @@ button { font-family: inherit; color: inherit; }
   background: var(--topbar-bg);
   -webkit-backdrop-filter: var(--topbar-blur);
   backdrop-filter: var(--topbar-blur);
-  border-bottom: 1px solid transparent;   /* 未滚动不显边，避免在纯蓝上多一条线 */
+  border-bottom: 1px solid var(--color-border-hairline);
   transition: padding .28s cubic-bezier(.22, .9, .3, 1),
               column-gap .28s cubic-bezier(.22, .9,.3, 1),
               background .28s, box-shadow .28s, border-color .28s;
@@ -449,16 +452,18 @@ main { max-width: 1200px; margin: 40px auto 96px; padding: 0 24px; }
    实测演示视频：卡片底色 #f5f5f5（= token color.cloud-gray），不画发丝边。 */
 .card {
   background: var(--card-solid);
-  border: 1px solid transparent;
+  border: 1px solid var(--color-border-hairline);
   border-radius: var(--radius-cards);
   padding: 40px;                 /* 规范：卡片内边距 40-48px */
   margin-bottom: 24px;
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 4px 20px -2px rgba(27, 28, 30, 0.05), 0 1px 3px 0 rgba(27, 28, 30, 0.03);
+  transition: box-shadow .2s ease, border-color .2s ease;
 }
-/* 嵌在浅灰卡内的白面块（次级容器 / 卡内浮层） */
+/* 嵌在讲义卡内的次级白面块（次级容器 / 卡内浮层） */
 .card .card, .surface-white {
   background: var(--color-paper-white);
-  border-color: transparent;
+  border: 1px solid var(--color-border-hairline);
+  border-radius: var(--radius-2xl);
 }
 .card-title { margin: 0 0 16px; font-size: 28px; line-height: 1.2; }
 .muted { color: var(--color-smoke); font-size: 12px; letter-spacing: var(--ls-muted); }
@@ -559,11 +564,13 @@ main { max-width: 1200px; margin: 40px auto 96px; padding: 0 24px; }
 /* ---------- 表单 ---------- */
 label.field { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--color-smoke); text-transform: uppercase; letter-spacing: var(--ls-tag); }
 select, input[type="number"], input[type="text"], input[type="password"], textarea {
-  border: 1px solid var(--color-ash); border-radius: var(--radius-2xl); padding: 9px 16px;
-  font-size: 14px; font-family: inherit; background: transparent; color: var(--color-off-black); outline: none;
+  border: 1px solid var(--color-border-hairline); border-radius: var(--radius-2xl); padding: 10px 16px;
+  font-size: 14px; font-family: inherit; background: var(--color-paper-white); color: var(--color-ink); outline: none;
   text-transform: none; letter-spacing: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .03);
+  transition: border-color .2s ease, box-shadow .2s ease;
 }
-select:focus, input:focus, textarea:focus { border-color: var(--color-lake-blue); }
+select:focus, input:focus, textarea:focus { border-color: var(--color-surgical-blue); box-shadow: 0 0 0 3px rgba(37, 151, 208, 0.15); }
 textarea { width: 100%; resize: vertical; line-height: 1.49; }
 .form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
@@ -816,14 +823,15 @@ dialog[open] { animation: dlgIn .38s cubic-bezier(.22, .9, .3, 1); }
 .mm-toolbar .tip { color: var(--color-smoke); font-size: 11px; margin-left: auto; text-transform: uppercase; letter-spacing: var(--ls-tag); }
 .mm-wrap { display: grid; grid-template-columns: 1fr 320px; gap: 16px; align-items: stretch; }
 .mm-svgbox {
-  background: var(--color-parchment); border: 1px solid var(--color-ash);
+  background: var(--color-parchment); border: 1px solid var(--color-border-hairline);
   border-radius: var(--radius-cards); height: 600px; overflow: hidden; position: relative;
+  box-shadow: 0 4px 20px -2px rgba(27, 28, 30, 0.05);
 }
 .mm-svgbox svg { width: 100%; height: 100%; cursor: grab; touch-action: none; }
 .mm-svgbox svg:active { cursor: grabbing; }
-.mm-link { fill: none; stroke: var(--color-ash); stroke-width: 1.2; }
+.mm-link { fill: none; stroke: rgba(23, 25, 28, 0.15); stroke-width: 1.2; }
 .mm-node { cursor: pointer; }
-.mm-node rect { fill: var(--color-parchment); stroke: var(--color-ash); stroke-width: 1; rx: 19px; transition: .15s; }
+.mm-node rect { fill: var(--color-paper-white); stroke: var(--color-border-hairline); stroke-width: 1; rx: 19px; transition: .15s; }
 .mm-node text { font-size: 13px; fill: var(--color-off-black); font-family: var(--font-mono); }
 .mm-node:hover rect { stroke: var(--color-lake-blue); }
 .mm-node.sel rect { stroke: var(--color-lake-blue); stroke-width: 2; }
@@ -1159,8 +1167,8 @@ html.dark {
                  inset 0 -1px 0 rgba(0, 0, 0, .28);
   /* 面色（深色）：卡片面 = 抬升的深灰；顶栏 = 毛玻璃近深底；次级容器更深一档 */
   --card-solid: #1e2026;
-  --topbar-bg: transparent;
-  --topbar-bg-compact: transparent;
+  --topbar-bg: rgba(22, 24, 29, 0.82);
+  --topbar-bg-compact: rgba(22, 24, 29, 0.92);
   --topbar-bg-home: transparent;
   --topbar-fg: #ffffff;
   /* 注意写死 #ffffff：--color-paper-white 在深色下反转为深画布色，引用它会让
@@ -1402,11 +1410,11 @@ html.dark .seg button.active { background: var(--color-periwinkle-mist); color: 
 .hw-card {
   position: relative;
   z-index: 1;
-  background: var(--color-paper-white);
-  border: 1px solid var(--color-ash);
+  background: var(--card-solid);
+  border: 1px solid var(--color-border-hairline);
   border-radius: var(--radius-cards);
   padding: 28px 30px;
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 8px 30px -4px rgba(27, 28, 30, 0.08);
   text-align: left;
 }
 
@@ -1421,9 +1429,9 @@ html.dark .seg button.active { background: var(--color-periwinkle-mist); color: 
 .hw-reel .mk-word {
   display: flex; align-items: baseline; gap: 10px;
   padding: 10px 14px;
-  border: 1px solid var(--color-ash);
-  border-radius: var(--radius-inputs);
   background: var(--color-paper-white);
+  border: 1px solid var(--color-border-hairline);
+  border-radius: var(--radius-inputs);
   opacity: .35;
   transition: opacity .4s ease;
 }
@@ -1465,13 +1473,20 @@ html.dark .seg button.active { background: var(--color-periwinkle-mist); color: 
   grid-template-columns: 1fr 1.1fr;
   gap: 48px;
   align-items: center;
-  padding: 24px 8px;
-  margin-bottom: 24px;
+  padding: 36px 40px;
+  margin-bottom: 28px;
+  background: var(--card-solid);
+  border: 1px solid var(--color-border-hairline);
   border-radius: var(--radius-cards);
+  box-shadow: 0 4px 20px -2px rgba(27, 28, 30, 0.05), 0 1px 3px 0 rgba(27, 28, 30, 0.03);
   cursor: pointer;
-  transition: background .2s ease;
+  transition: transform .22s cubic-bezier(.22, .9, .3, 1), box-shadow .22s cubic-bezier(.22, .9, .3, 1), border-color .22s ease;
 }
-.feat:hover { background: rgba(215, 230, 245, .3); }   /* Sky Tint 悬停 */
+.feat:hover {
+  transform: translateY(-3px);
+  border-color: rgba(23, 25, 28, 0.16);
+  box-shadow: 0 12px 32px -4px rgba(27, 28, 30, 0.09);
+}
 .feat.flip .feat-text { order: 2; }
 .feat.flip .feat-visual { order: 1; }
 .feat-text { min-width: 0; }
