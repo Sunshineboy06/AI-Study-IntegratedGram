@@ -26,13 +26,12 @@
   --color-sienna-brown: #5d2a1a;              /* Sienna Brown 暖深棕 */
   --color-surgical-blue: #2597d0;             /* Surgical Blue：唯一彩色微图形 */
   --color-lake-blue: #146a94;                 /* 文字级蓝（浅色） */
-  --gradient-sky: linear-gradient(180deg, #779bc1 0%, #9abfda 58%, #cbdcec 100%);
-  /* 首屏全屏蓝（取自 Letters 首页样图实测，非上面的卡片天空渐变）：
-     x=8 采样 0%#769bbf → 30%#87acce → 50%#91b7d4 → 70%#9fc3db → 90%#b3d1e3
-     底部略去饱和，与压在蓝底上的白色卡片形成柔和过渡 */
-  --gradient-hero-full: linear-gradient(180deg,
-      #769bbf 0%, #7ca1c5 10%, #87acce 30%, #91b7d4 50%,
-      #9fc3db 70%, #b2cfe4 88%, #c3d9e9 100%);
+  --color-border-hairline: rgba(23, 25, 28, 0.08);
+
+  /* Steep 刊物级纸面渐变（浅色：雾灰微渐变；彻底告别刺眼大蓝横幅） */
+  --gradient-sky: linear-gradient(180deg, #f2f2f3 0%, #ebebef 100%);
+  --gradient-hero-full: linear-gradient(180deg, #fafafb 0%, #f2f2f3 100%);
+
   /* 旧令牌名 → 新调色板（全站组件引用，只在此处映射，一次换肤） */
   --color-parchment: var(--color-paper-white);
   --color-off-black: var(--color-obsidian);
@@ -432,14 +431,15 @@ main { max-width: 1200px; margin: 40px auto 96px; padding: 0 24px; }
    四角统一圆角，不再上提钻到顶栏后面。负左右边距 breakout 到视口全宽（min() 夹住防窄屏反噬）。 */
 .page-title {
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 500;
+  font-size: clamp(28px, 3.6vw, 40px);
   line-height: 1.25;
-  letter-spacing: -0.66px;
+  letter-spacing: -0.03em;
   text-align: center;
-  color: #ffffff;
+  color: var(--color-ink);
   background: var(--gradient-hero-full);
-  padding: 44px 24px 48px;
+  border: 1px solid var(--color-border-hairline);
+  padding: 40px 24px 44px;
   margin: 0 min(0px, calc(-50vw + 600px)) 28px;
   border-radius: var(--radius-3xl);   /* 四角圆角，上部不再被顶栏遮挡 */
 }
@@ -1148,10 +1148,9 @@ html.dark {
   --v-hl-bg: rgba(93, 180, 224, .28);
   --v-hl-text: #d9eefb;
 
-  /* 夜间 Hero：暗夜空渐变，保留氛围但降低亮度（首屏全屏版同系更深） */
-  --gradient-sky: linear-gradient(180deg, #1d2c3d 0%, #24384c 58%, #2d4257 100%);
-  --gradient-hero-full: linear-gradient(180deg,
-      #16222f 0%, #1b2a3a 30%, #213243 55%, #263a4c 78%, #2b4155 100%);
+  /* 夜间 Hero：沉静夜空冷墨渐变，消除突兀纯蓝 */
+  --gradient-sky: linear-gradient(180deg, #1b1d22 0%, #16171b 100%);
+  --gradient-hero-full: linear-gradient(180deg, #1e2026 0%, #16181d 100%);
 
   /* 夜间液态玻璃：仅 Hero 天空区使用，填充改为深色半透、亮线减弱 */
   --glass-fill: rgba(255, 255, 255, .10);
@@ -1178,20 +1177,25 @@ html.dark .tabs button + button::after { background: rgba(255, 255, 255, .14); }
 html.dark .tabs button:hover { color: var(--color-off-black); background: rgba(255, 255, 255, .07); }
 html.dark .glass-group > .btn:hover { background: rgba(255, 255, 255, .07); }
 /* 深色 Hero 的夜空渐变上，白玻璃按钮略降亮度以免过曝 */
+/* 深色 Hero 下操作区胶囊与主按钮：白底黑字保持最佳视觉层级 */
+html.dark .hero2-actions { background: var(--card-solid); border-color: var(--color-border-hairline); }
 html.dark .hero2-actions > .btn:not(.primary) {
-  background: rgba(255, 255, 255, .78);
-  border-color: rgba(255, 255, 255, .55);
+  background: transparent;
+  color: var(--color-charcoal);
+  border-color: transparent;
 }
-html.dark .hero2-actions > .btn:not(.primary):hover { background: rgba(255, 255, 255, .92); }
-html.dark .hero2-actions { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .22); }
-/* 夜间主按钮：Obsidian 反转为亮面（深色画布上纯黑会失去轮廓）。
-   Hero 的黑色 CTA 单独排除：它压在天空渐变上，两种主题下都必须保持黑底白字。 */
+html.dark .hero2-actions > .btn:not(.primary):hover {
+  background: rgba(255, 255, 255, .08);
+  color: #ffffff;
+}
 html.dark .btn.primary { background: #f0f2f5; border-color: rgba(255, 255, 255, .18); color: #0d0f12; }
 html.dark .btn.primary:hover { background: #ffffff; border-color: rgba(255, 255, 255, .28); color: #0d0f12; }
-html.dark .hero2-actions > .btn.primary,
+html.dark .hero2-actions > .btn.primary {
+  background: #f0f2f5; border-color: transparent; color: #0d0f12;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .4);
+}
 html.dark .hero2-actions > .btn.primary:hover {
-  background: #070709; border-color: transparent; color: #ffffff;
-  box-shadow: rgba(7, 7, 9, .26) 0 3px 10px 0, rgba(7, 7, 9, .18) 0 16px 36px 0;
+  background: #ffffff; color: #000000;
 }
 html.dark .glass-group > .btn.active,
 html.dark .glass-group > .btn.is-on,
@@ -1316,7 +1320,7 @@ html.dark .seg button.active { background: var(--color-periwinkle-mist); color: 
   justify-content: center;
   text-align: center;
   background: var(--gradient-hero-full);
-  border: none;
+  border: 1px solid var(--color-border-hairline);
   border-radius: var(--radius-3xl);   /* 四角圆角，上部边界与下部一致 */
   /* 上内边距 = 视觉留白，内容垂直居中由 flex 保证 */
   padding: 72px max(24px, calc(50vw - 560px)) 88px;
@@ -1330,28 +1334,23 @@ html.dark .seg button.active { background: var(--color-periwinkle-mist); color: 
 }
 .hero2-l { max-width: 760px; }
 .hero2-l h1 {
-  font-size: clamp(40px, 5.8vw, 72px);
+  font-size: clamp(38px, 5.5vw, 68px);
   margin: 0 0 20px;
-  line-height: 1.08;
+  line-height: 1.1;
   letter-spacing: var(--ls-display);        /* 规范：大标题 -0.04em */
-  color: #ffffff;
+  color: var(--color-ink);
 }
-.hero2-l p { color: rgba(255, 255, 255, .93); font-size: 17px; line-height: 1.55; margin: 0 auto 30px; max-width: 560px; }
-.hero2-l p b { color: #ffffff; }
+.hero2-l p { color: var(--color-charcoal); font-size: 17px; line-height: 1.6; margin: 0 auto 30px; max-width: 560px; }
+.hero2-l p b { color: var(--color-ink); }
 
-/* Hero 操作区 = 连体玻璃组；位于蓝色渐变上，玻璃更透、高光更强
-   （全站唯一保留液态玻璃的区域，与演示视频一致） */
+/* Hero 操作区 = 连体药丸操作组 */
 .hero2-actions {
   display: inline-flex; align-items: stretch; gap: 0;
-  padding: 3px; margin-top: 4px;
+  padding: 4px; margin-top: 4px;
   border-radius: var(--radius-buttons);
-  background: var(--glass-fill);
-  -webkit-backdrop-filter: blur(16px) saturate(1.7);
-  backdrop-filter: blur(16px) saturate(1.7);
-  border: 1px solid var(--glass-line);
-  box-shadow: rgba(16, 55, 132, .10) 0 3px 10px 0,
-              rgba(16, 55, 132, .08) 0 16px 36px 0,
-              var(--glass-inset);
+  background: var(--card-solid);
+  border: 1px solid var(--color-border-hairline);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .05);
 }
 .hero2-actions > .btn {
   background: transparent; border-color: transparent; box-shadow: none;
@@ -1359,16 +1358,18 @@ html.dark .seg button.active { background: var(--color-periwinkle-mist); color: 
   border-radius: var(--radius-pills);
 }
 .hero2-actions > .btn::before { display: none; }
-.hero2-actions > .btn:hover { background: rgba(255, 255, 255, .34); transform: none; box-shadow: none; }
-/* 组内非主按钮：在天空渐变上加浅玻璃底。文字恒用深墨（Hero 无论主题都是浅色天空底），
-   不能用 --color-paper-white —— 该令牌在深色模式会反转为深色，导致浅底深字叠加而不可读。 */
+.hero2-actions > .btn:hover { background: var(--color-cloud-gray); transform: none; box-shadow: none; }
+/* 组内非主按钮 */
 .hero2-actions > .btn:not(.primary) {
-  background: rgba(255, 255, 255, .62);
-  color: #0b1016;
-  border-color: rgba(255, 255, 255, .72);
-  font-weight: 600;
+  background: transparent;
+  color: var(--color-charcoal);
+  border-color: transparent;
+  font-weight: 500;
 }
-.hero2-actions > .btn:not(.primary):hover { background: rgba(255, 255, 255, .82); }
+.hero2-actions > .btn:not(.primary):hover {
+  background: var(--color-cloud-gray);
+  color: var(--color-ink);
+}
 /* Hero 主 CTA = Obsidian 纯黑胶囊（视频中 Hero 与顶栏注册的唯一形态）。
    必须写死 #070709 而非 var(--color-obsidian)：Hero 天空渐变在深浅两色下都是浅底，
    而 --color-obsidian 在 html.dark 会反转为浅色，导致白底白字不可读。 */
@@ -1386,7 +1387,8 @@ html.dark .seg button.active { background: var(--color-periwinkle-mist); color: 
 .hero2-actions > .btn.primary + .btn::after { opacity: 0; }
 
 .hero2-links { display: flex; gap: 6px 22px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
-.hero2-links .feat-link { color: #ffffff; }
+.hero2-links .feat-link { color: var(--color-charcoal); }
+.hero2-links .feat-link:hover { color: var(--color-ink); }
 
 /* ---- Hero 右栏（今日·背单词卡）：样图为居中单栏，卡片落在蓝色末端 ----
    卡片与 CTA 保持明确间距（不再负 margin 上提，避免压住按钮），

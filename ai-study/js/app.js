@@ -38,18 +38,19 @@ window.addEventListener('DOMContentLoaded', () => {
   Store.init();
   renderFolderBar();
 
-  /* ---------- 深浅色主题切换（偏好存本机，夜间学习友好） ---------- */
+  /* ---------- 深浅色主题切换（兼容旧版与 SteepTheme 全局管理器） ---------- */
   const themeBtn = $('#theme-toggle');
-  const applyTheme = dark => {
-    document.documentElement.classList.toggle('dark', dark);
-    try { localStorage.setItem('platform.theme', dark ? 'dark' : 'light'); } catch (e) { /* 忽略 */ }
-    /* 图标反映当前主题：用单色几何符号，避免 emoji 自带彩色破坏单色体系 */
-    themeBtn.textContent = dark ? '◐ 夜间' : '◑ 日间';
-    themeBtn.title = dark ? '当前为夜间模式，点击切换' : '当前为日间模式，点击切换';
-  };
-  applyTheme(document.documentElement.classList.contains('dark'));
-  themeBtn.addEventListener('click', () =>
-    applyTheme(!document.documentElement.classList.contains('dark')));
+  if (themeBtn) {
+    const applyTheme = dark => {
+      document.documentElement.classList.toggle('dark', dark);
+      try { localStorage.setItem('platform.theme', dark ? 'dark' : 'light'); } catch (e) { /* 忽略 */ }
+      themeBtn.textContent = dark ? '◐ 夜间' : '◑ 日间';
+      themeBtn.title = dark ? '当前为夜间模式，点击切换' : '当前为日间模式，点击切换';
+    };
+    applyTheme(document.documentElement.classList.contains('dark'));
+    themeBtn.addEventListener('click', () =>
+      applyTheme(!document.documentElement.classList.contains('dark')));
+  }
 
   /* 滚动动态模糊：滚动中轻微高斯模糊，停止后恢复清晰 */
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
